@@ -7,6 +7,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Unosquare.FFME.Common.NET4.Shared;
 
     /// <summary>
     /// Holds media information about the input, its chapters, programs and individual stream components
@@ -521,7 +522,10 @@
         /// <summary>
         /// Gets a value indicating whether this instance is attached picture disposition.
         /// </summary>
-        public bool IsAttachedPictureDisposition => (Disposition & ffmpeg.AV_DISPOSITION_ATTACHED_PIC) != 0;
+        public bool IsAttachedPictureDisposition
+        {
+            get { return (Disposition & ffmpeg.AV_DISPOSITION_ATTACHED_PIC) != 0; }
+        }
 
         /// <summary>
         /// Gets the start time.
@@ -551,8 +555,10 @@
         /// <summary>
         /// Gets the language string from the stream's metadata.
         /// </summary>
-        public string Language => Metadata.ContainsKey("language") ?
-            Metadata["language"] : string.Empty;
+        public string Language
+        {
+            get { return Metadata.ContainsKey("language") ? Metadata["language"] : string.Empty; }
+        }
     }
 
     /// <summary>
@@ -614,7 +620,9 @@
         /// <summary>
         /// Gets the name of the program. Empty if unavailable.
         /// </summary>
-        public string Name => Metadata.ContainsKey("name") ?
-            Metadata["name"] : string.Empty;
+        public string Name
+        {
+            get { return Metadata.ContainsKey("name") ? Metadata["name"] : string.Empty; }
+        }
     }
 }

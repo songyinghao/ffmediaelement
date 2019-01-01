@@ -49,9 +49,9 @@
         protected override void Deallocate()
         {
             base.Deallocate();
-            SampleRate = default;
-            ChannelCount = default;
-            SamplesPerChannel = default;
+            SampleRate = default(int);
+            ChannelCount = default(int);
+            SamplesPerChannel = default(int);
             SamplesBufferLength = 0;
         }
 

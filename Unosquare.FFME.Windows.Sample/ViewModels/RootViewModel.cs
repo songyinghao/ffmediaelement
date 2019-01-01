@@ -36,12 +36,18 @@
         /// <summary>
         /// Gets the product name
         /// </summary>
-        public static string ProductName => "Unosquare FFME-Play";
+        public static string ProductName
+        {
+            get { return "Unosquare FFME-Play"; }
+        }
 
         /// <summary>
         /// Provides access to the application object owning this View-Model.
         /// </summary>
-        public App App => App.Current;
+        public App App
+        {
+            get { return App.Current; }
+        }
 
         /// <summary>
         /// Gets the playlist ViewModel.
@@ -68,8 +74,8 @@
         /// </summary>
         public string WindowTitle
         {
-            get => m_WindowTitle;
-            private set => SetProperty(ref m_WindowTitle, value);
+            get { return m_WindowTitle; }
+            private set { SetProperty(ref m_WindowTitle, value); }
         }
 
         /// <summary>
@@ -77,8 +83,8 @@
         /// </summary>
         public bool IsPlaylistPanelOpen
         {
-            get => m_IsPlaylistPanelOpen;
-            set => SetProperty(ref m_IsPlaylistPanelOpen, value);
+            get { return m_IsPlaylistPanelOpen; }
+            set { SetProperty(ref m_IsPlaylistPanelOpen, value); }
         }
 
         /// <summary>
@@ -86,8 +92,8 @@
         /// </summary>
         public bool IsPropertiesPanelOpen
         {
-            get => m_IsPropertiesPanelOpen;
-            set => SetProperty(ref m_IsPropertiesPanelOpen, value);
+            get { return m_IsPropertiesPanelOpen; }
+            set { SetProperty(ref m_IsPropertiesPanelOpen, value); }
         }
 
         /// <summary>
@@ -95,8 +101,8 @@
         /// </summary>
         public bool IsApplicationLoaded
         {
-            get => m_IsApplicationLoaded;
-            set => SetProperty(ref m_IsApplicationLoaded, value);
+            get { return m_IsApplicationLoaded; }
+            set { SetProperty(ref m_IsApplicationLoaded, value); }
         }
 
         /// <summary>

@@ -7,6 +7,7 @@
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Threading;
+    using Unosquare.Threading;
 
     /// <summary>
     /// Serves as a UI, XAML-bindable command defined using delegates
@@ -29,7 +30,11 @@
         /// <exception cref="ArgumentNullException">execute</exception>
         public DelegateCommand(Action<object> execute, Func<object, bool> canExecute)
         {
-            var callback = execute ?? throw new ArgumentNullException(nameof(execute));
+            if (execute == null)
+            {
+                throw new ArgumentNullException(nameof(execute));
+            }
+            var callback = execute;
             m_CanExecute = canExecute;
 
             ExecuteAction = parameter =>
@@ -59,8 +64,8 @@
         /// <inheritdoc />
         public event EventHandler CanExecuteChanged
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
 
         #endregion
@@ -89,17 +94,24 @@
         /// <returns>
         ///   <c>true</c> if this instance can execute; otherwise, <c>false</c>.
         /// </returns>
-        public bool CanExecute() => CanExecute(null);
+        public bool CanExecute()
+        {
+            return CanExecute(null);
+        }
 
         /// <inheritdoc />
-        public void Execute(object parameter) =>
+        public void Execute(object parameter)
+        {
             ExecuteAsync(parameter).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Executes the command but does not wait for it to complete
         /// </summary>
-        public void Execute() =>
+        public void Execute()
+        {
             ExecuteAsync(null).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Executes the command. This call can be awaited.
@@ -113,7 +125,9 @@
             try
             {
                 IsExecuting.Value = true;
-                await Application.Current.Dispatcher.BeginInvoke(ExecuteAction, DispatcherPriority.Normal, parameter);
+                await TaskEx.Run(() => {
+                    Application.Current.Dispatcher.Invoke(ExecuteAction, DispatcherPriority.Normal, parameter);
+                });
             }
             catch (Exception ex)
             {
@@ -131,7 +145,10 @@
         /// Executes the command. This call can be awaited.
         /// </summary>
         /// <returns>The awaitable task</returns>
-        public async Task ExecuteAsync() => await ExecuteAsync(null).ConfigureAwait(false);
+        public async Task ExecuteAsync()
+        {
+            await ExecuteAsync(null).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Raises the can execute changed.

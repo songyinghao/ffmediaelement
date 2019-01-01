@@ -72,8 +72,12 @@
         /// <exception cref="MediaContainerException">The container exception.</exception>
         protected MediaComponent(MediaContainer container, int streamIndex)
         {
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
             // Ported from: https://github.com/FFmpeg/FFmpeg/blob/master/fftools/ffplay.c#L2559
-            Container = container ?? throw new ArgumentNullException(nameof(container));
+            Container = container;
             m_LoggingHandler = ((ILoggingSource)Container).LoggingHandler;
             m_CodecContext = new IntPtr(ffmpeg.avcodec_alloc_context3(null));
             RC.Current.Add(CodecContext);
@@ -256,17 +260,26 @@
         #region Properties
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => m_LoggingHandler;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return m_LoggingHandler; }
+        }
 
         /// <summary>
         /// Gets the pointer to the codec context.
         /// </summary>
-        public AVCodecContext* CodecContext => (AVCodecContext*)m_CodecContext;
+        public AVCodecContext* CodecContext
+        {
+            get { return (AVCodecContext*) m_CodecContext; }
+        }
 
         /// <summary>
         /// Gets a pointer to the component's stream.
         /// </summary>
-        public AVStream* Stream => (AVStream*)m_Stream;
+        public AVStream* Stream
+        {
+            get { return (AVStream*) m_Stream; }
+        }
 
         /// <summary>
         /// Gets the media container associated with this component.
@@ -301,18 +314,27 @@
         /// packet buffer. Limit your Reads to something reasonable before
         /// this becomes too large.
         /// </summary>
-        public long BufferLength => Packets.BufferLength;
+        public long BufferLength
+        {
+            get { return Packets.BufferLength; }
+        }
 
         /// <summary>
         /// Gets the duration of the packet buffer.
         /// </summary>
-        public TimeSpan BufferDuration => Packets.GetDuration(StreamInfo.TimeBase);
+        public TimeSpan BufferDuration
+        {
+            get { return Packets.GetDuration(StreamInfo.TimeBase); }
+        }
 
         /// <summary>
         /// Gets the number of packets in the queue.
         /// Decode packets until this number becomes 0.
         /// </summary>
-        public int BufferCount => Packets.Count;
+        public int BufferCount
+        {
+            get { return Packets.Count; }
+        }
 
         /// <summary>
         /// Gets the number of packets to cache before <see cref="HasEnoughPackets"/> returns true.
@@ -373,8 +395,8 @@
         /// </summary>
         public bool HasPacketsInCodec
         {
-            get => m_HasCodecPackets.Value;
-            private set => m_HasCodecPackets.Value = value;
+            get { return m_HasCodecPackets.Value; }
+            private set { m_HasCodecPackets.Value = value; }
         }
 
         /// <summary>
@@ -382,8 +404,8 @@
         /// </summary>
         public bool IsDisposed
         {
-            get => m_IsDisposed.Value;
-            private set => m_IsDisposed.Value = value;
+            get { return m_IsDisposed.Value; }
+            private set { m_IsDisposed.Value = value; }
         }
 
         #endregion
@@ -439,7 +461,10 @@
         /// Feeds the decoder buffer and tries to return the next available frame.
         /// </summary>
         /// <returns>The received Media Frame. It is null if no frame could be retrieved.</returns>
-        public MediaFrame ReceiveNextFrame() => DecodePacketFunction();
+        public MediaFrame ReceiveNextFrame()
+        {
+            return DecodePacketFunction();
+        }
 
         /// <summary>
         /// Converts decoded, raw frame data in the frame source into a a usable frame. <br />
@@ -455,7 +480,10 @@
         public abstract bool MaterializeFrame(MediaFrame input, ref MediaBlock output, MediaBlock previousBlock);
 
         /// <inheritdoc />
-        public void Dispose() => Dispose(true);
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         /// <summary>
         /// Creates a frame source object given the raw FFmpeg AVFrame or AVSubtitle reference.
@@ -499,7 +527,7 @@
         /// that tells the decoder to flush it internal buffers
         /// This an encapsulation of flush_pkt
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void SendFlushPacket()
         {
             var packet = MediaPacket.CreateFlushPacket(Stream->index);
@@ -509,7 +537,7 @@
         /// <summary>
         /// Flushes the codec buffers.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void FlushCodecBuffers()
         {
             if (m_CodecContext != IntPtr.Zero)
@@ -523,7 +551,7 @@
         /// </summary>
         /// <param name="fillDecoderBuffer">if set to <c>true</c> fills the decoder buffer with packets.</param>
         /// <returns>The number of packets fed</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private int FeedPacketsToDecoder(bool fillDecoderBuffer)
         {
             var packetCount = 0;
@@ -574,7 +602,7 @@
         /// </summary>
         /// <param name="receiveFrameResult">The receive frame result.</param>
         /// <returns>The frame or null if no frames could be decoded</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private MediaFrame ReceiveFrameFromDecoder(out int receiveFrameResult)
         {
             MediaFrame managedFrame = null;
@@ -605,7 +633,8 @@
         /// <returns>A decoder result containing the decoder frames (if any)</returns>
         private MediaFrame DecodeNextAVFrame()
         {
-            var frame = ReceiveFrameFromDecoder(out var receiveFrameResult);
+            int receiveFrameResult;
+            var frame = ReceiveFrameFromDecoder(out receiveFrameResult);
             if (frame == null)
             {
                 FeedPacketsToDecoder(false);
@@ -622,10 +651,19 @@
             if (frame == null || Container.Components.OnFrameDecoded == null)
                 return frame;
 
-            if (MediaType == MediaType.Audio && frame is AudioFrame audioFrame)
+            var audioFrame = frame as AudioFrame;
+            if (MediaType == MediaType.Audio && audioFrame != null)
+            {
                 Container.Components.OnFrameDecoded?.Invoke((IntPtr)audioFrame.Pointer, MediaType);
-            else if (MediaType == MediaType.Video && frame is VideoFrame videoFrame)
-                Container.Components.OnFrameDecoded?.Invoke((IntPtr)videoFrame.Pointer, MediaType);
+            }
+            else
+            {
+                var videoFrame = frame as VideoFrame;
+                if (MediaType == MediaType.Video && videoFrame != null)
+                {
+                    Container.Components.OnFrameDecoded?.Invoke((IntPtr)videoFrame.Pointer, MediaType);
+                }
+            }
 
             return frame;
         }

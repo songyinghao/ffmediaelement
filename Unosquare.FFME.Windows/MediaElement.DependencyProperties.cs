@@ -22,8 +22,8 @@ namespace Unosquare.FFME
         [Description("The playback volume. Ranges from 0.0 to 1.0")]
         public double Volume
         {
-            get => (double)GetValue(VolumeProperty);
-            set => SetValue(VolumeProperty, value);
+            get { return (double) GetValue(VolumeProperty); }
+            set { SetValue(VolumeProperty, value); }
         }
 
         /// <summary>
@@ -37,13 +37,16 @@ namespace Unosquare.FFME
                 OnVolumePropertyChanged,
                 OnVolumePropertyChanging));
 
-        private static object OnVolumePropertyChanging(DependencyObject d, object value) =>
-            ((double)value).Clamp(Constants.Controller.MinVolume, Constants.Controller.MaxVolume);
+        private static object OnVolumePropertyChanging(DependencyObject d, object value)
+        {
+            return ((double) value).Clamp(Constants.Controller.MinVolume, Constants.Controller.MaxVolume);
+        }
 
         private static void OnVolumePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MediaElement m && m.MediaCore != null && e.NewValue is double v)
-                m.MediaCore.State.Volume = v;
+            var m = d as MediaElement;
+            if (m != null && m.MediaCore != null && e.NewValue is double)
+                m.MediaCore.State.Volume = (double)e.NewValue;
         }
 
         #endregion
@@ -57,8 +60,8 @@ namespace Unosquare.FFME
         [Description("The audio volume for left and right audio channels. Valid ranges are -1.0 to 1.0")]
         public double Balance
         {
-            get => (double)GetValue(BalanceProperty);
-            set => SetValue(BalanceProperty, value);
+            get { return (double) GetValue(BalanceProperty); }
+            set { SetValue(BalanceProperty, value); }
         }
 
         /// <summary>
@@ -72,13 +75,16 @@ namespace Unosquare.FFME
                 OnBalancePropertyChanged,
                 OnBalancePropertyChanging));
 
-        private static object OnBalancePropertyChanging(DependencyObject d, object value) =>
-            ((double)value).Clamp(Constants.Controller.MinBalance, Constants.Controller.MaxBalance);
+        private static object OnBalancePropertyChanging(DependencyObject d, object value)
+        {
+            return ((double) value).Clamp(Constants.Controller.MinBalance, Constants.Controller.MaxBalance);
+        }
 
         private static void OnBalancePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MediaElement m && m.MediaCore != null && e.NewValue is double v)
-                m.MediaCore.State.Balance = v;
+            var m = d as MediaElement;
+            if (m != null && m.MediaCore != null && e.NewValue is double)
+                m.MediaCore.State.Balance = (double)e.NewValue;
         }
 
         #endregion
@@ -92,8 +98,8 @@ namespace Unosquare.FFME
         [Description("Gets or sets whether audio samples should be rendered.")]
         public bool IsMuted
         {
-            get => (bool)GetValue(IsMutedProperty);
-            set => SetValue(IsMutedProperty, value);
+            get { return (bool) GetValue(IsMutedProperty); }
+            set { SetValue(IsMutedProperty, value); }
         }
 
         /// <summary>
@@ -108,8 +114,9 @@ namespace Unosquare.FFME
 
         private static void OnIsMutedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MediaElement m && m.MediaCore != null && e.NewValue is bool v)
-                m.MediaCore.State.IsMuted = v;
+            var m = d as MediaElement;
+            if (m != null && m.MediaCore != null && e.NewValue is bool)
+                m.MediaCore.State.IsMuted = (bool)e.NewValue;
         }
 
         #endregion
@@ -123,8 +130,8 @@ namespace Unosquare.FFME
         [Description("Specifies how quickly or how slowly the media should be rendered. 1.0 is normal speed. Value must be greater then or equal to 0.0")]
         public double SpeedRatio
         {
-            get => (double)GetValue(SpeedRatioProperty);
-            set => SetValue(SpeedRatioProperty, value);
+            get { return (double) GetValue(SpeedRatioProperty); }
+            set { SetValue(SpeedRatioProperty, value); }
         }
 
         /// <summary>
@@ -153,8 +160,9 @@ namespace Unosquare.FFME
 
         private static void OnSpeedRatioPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MediaElement m && m.MediaCore != null && e.NewValue is double v)
-                m.MediaCore.State.SpeedRatio = v;
+            var m = d as MediaElement;
+            if (m != null && m.MediaCore != null && e.NewValue is double)
+                m.MediaCore.State.SpeedRatio = (double)e.NewValue;
         }
 
         #endregion
@@ -168,8 +176,8 @@ namespace Unosquare.FFME
         [Description("Specifies the position of the underlying media. Set this property to seek though the media stream.")]
         public TimeSpan Position
         {
-            get => (TimeSpan)GetValue(PositionProperty);
-            set => SetValue(PositionProperty, value);
+            get { return (TimeSpan) GetValue(PositionProperty); }
+            set { SetValue(PositionProperty, value); }
         }
 
         /// <summary>
@@ -230,8 +238,8 @@ namespace Unosquare.FFME
         [Description("The URL to load the media from. Set it to null in order to close the currently open media.")]
         public Uri Source
         {
-            get => GetValue(SourceProperty) as Uri;
-            set => SetValue(SourceProperty, value);
+            get { return GetValue(SourceProperty) as Uri; }
+            set { SetValue(SourceProperty, value); }
         }
 
         /// <summary>
@@ -259,9 +267,10 @@ namespace Unosquare.FFME
             {
                 await element.Close();
             }
-            else if (e.NewValue != null && element.IsOpening == false && e.NewValue is Uri uri)
+            else if (e.NewValue != null && element.IsOpening == false && e.NewValue is Uri)
             {
-                // Skip change actions if we are currently opening via the Open command
+                var uri = (Uri) e.NewValue;
+                // Skip change aUrictions if we are currently opening via the Open command
                 if (element.IsOpeningViaCommand.Value == false)
                     await element.MediaCore?.Open(uri);
 
@@ -280,8 +289,8 @@ namespace Unosquare.FFME
         /// </summary>
         public Stretch Stretch
         {
-            get => (Stretch)GetValue(StretchProperty);
-            set => SetValue(StretchProperty, value);
+            get { return (Stretch) GetValue(StretchProperty); }
+            set { SetValue(StretchProperty, value); }
         }
 
         /// <summary>
@@ -293,8 +302,9 @@ namespace Unosquare.FFME
 
         private static void OnStretchPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MediaElement m && m.VideoView != null && m.VideoView.IsLoaded && e.NewValue is Stretch v)
-                m.VideoView.Stretch = v;
+            var m = d as MediaElement;
+            if (m != null && m.VideoView != null && m.VideoView.IsLoaded && e.NewValue is Stretch)
+                m.VideoView.Stretch = (Stretch)e.NewValue;
         }
 
         #endregion
@@ -309,8 +319,8 @@ namespace Unosquare.FFME
         /// </summary>
         public StretchDirection StretchDirection
         {
-            get => (StretchDirection)GetValue(StretchDirectionProperty);
-            set => SetValue(StretchDirectionProperty, value);
+            get { return (StretchDirection) GetValue(StretchDirectionProperty); }
+            set { SetValue(StretchDirectionProperty, value); }
         }
 
         /// <summary>
@@ -322,8 +332,9 @@ namespace Unosquare.FFME
 
         private static void OnStretchDirectionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MediaElement m && m.VideoView != null && m.VideoView.IsLoaded && e.NewValue is StretchDirection v)
-                m.VideoView.StretchDirection = v;
+            var m = d as MediaElement;
+            if (m != null && m.VideoView != null && m.VideoView.IsLoaded && e.NewValue is StretchDirection)
+                m.VideoView.StretchDirection = (StretchDirection)e.NewValue;
         }
 
         #endregion
@@ -338,8 +349,8 @@ namespace Unosquare.FFME
         [Description("Gets or sets a value that indicates whether the MediaElement will update frames for seek operations while paused.")]
         public bool ScrubbingEnabled
         {
-            get => (bool)GetValue(ScrubbingEnabledProperty);
-            set => SetValue(ScrubbingEnabledProperty, value);
+            get { return (bool) GetValue(ScrubbingEnabledProperty); }
+            set { SetValue(ScrubbingEnabledProperty, value); }
         }
 
         /// <summary>
@@ -365,8 +376,8 @@ namespace Unosquare.FFME
         [Description("Specifies how the underlying media should behave when it has loaded. The default behavior is to Play the media.")]
         public MediaState LoadedBehavior
         {
-            get => (MediaState)GetValue(LoadedBehaviorProperty);
-            set => SetValue(LoadedBehaviorProperty, value);
+            get { return (MediaState) GetValue(LoadedBehaviorProperty); }
+            set { SetValue(LoadedBehaviorProperty, value); }
         }
 
         /// <summary>
@@ -388,8 +399,8 @@ namespace Unosquare.FFME
         [Description("Specifies how the underlying media should behave when it has ended. The default behavior is to Close the media.")]
         public MediaState UnloadedBehavior
         {
-            get => (MediaState)GetValue(UnloadedBehaviorProperty);
-            set => SetValue(UnloadedBehaviorProperty, value);
+            get { return (MediaState) GetValue(UnloadedBehaviorProperty); }
+            set { SetValue(UnloadedBehaviorProperty, value); }
         }
 
         /// <summary>
@@ -411,8 +422,8 @@ namespace Unosquare.FFME
         [Description("The video CC Channel to render. Ranges from 0 to 4")]
         public CaptionsChannel ClosedCaptionsChannel
         {
-            get => (CaptionsChannel)GetValue(ClosedCaptionsChannelProperty);
-            set => SetValue(ClosedCaptionsChannelProperty, value);
+            get { return (CaptionsChannel) GetValue(ClosedCaptionsChannelProperty); }
+            set { SetValue(ClosedCaptionsChannelProperty, value); }
         }
 
         /// <summary>
@@ -427,7 +438,8 @@ namespace Unosquare.FFME
 
         private static void OnClosedCaptionsChannelPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MediaElement m) m.CaptionsView.Reset();
+            var m = d as MediaElement;
+            if (m != null) m.CaptionsView.Reset();
         }
 
         #endregion

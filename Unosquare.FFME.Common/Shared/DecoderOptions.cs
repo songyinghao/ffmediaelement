@@ -46,8 +46,8 @@
         /// </summary>
         public string Threads
         {
-            get => this[GlobalOptionNames.Threads];
-            set => this[GlobalOptionNames.Threads] = value;
+            get { return this[GlobalOptionNames.Threads]; }
+            set { this[GlobalOptionNames.Threads] = value; }
         }
 
         /// <summary>
@@ -55,8 +55,8 @@
         /// </summary>
         public string RefCountedFrames
         {
-            get => this[GlobalOptionNames.RefCountedFrames];
-            set => this[GlobalOptionNames.RefCountedFrames] = value;
+            get { return this[GlobalOptionNames.RefCountedFrames]; }
+            set { this[GlobalOptionNames.RefCountedFrames] = value; }
         }
 
         /// <summary>
@@ -64,8 +64,8 @@
         /// </summary>
         internal string LowResIndexOption
         {
-            get => this[GlobalOptionNames.LowRes];
-            set => this[GlobalOptionNames.LowRes] = value;
+            get { return this[GlobalOptionNames.LowRes]; }
+            set { this[GlobalOptionNames.LowRes] = value; }
         }
 
         /// <summary>
@@ -76,8 +76,8 @@
         /// <returns>The value of the option</returns>
         public string this[string globalOptionName]
         {
-            get => GlobalOptions.ContainsKey(globalOptionName) ? GlobalOptions[globalOptionName] : null;
-            set => GlobalOptions[globalOptionName] = value;
+            get { return GlobalOptions.ContainsKey(globalOptionName) ? GlobalOptions[globalOptionName] : null; }
+            set { GlobalOptions[globalOptionName] = value; }
         }
 
         /// <summary>

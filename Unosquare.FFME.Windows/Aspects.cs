@@ -5,10 +5,19 @@
     /// </summary>
     internal static class Aspects
     {
-        public static string VideoRenderer => "Element.Video";
+        public static string VideoRenderer
+        {
+            get { return "Element.Video"; }
+        }
 
-        public static string AudioRenderer => "Element.Audio";
+        public static string AudioRenderer
+        {
+            get { return "Element.Audio"; }
+        }
 
-        public static string Events => "Element.Events";
+        public static string Events
+        {
+            get { return "Element.Events"; }
+        }
     }
 }

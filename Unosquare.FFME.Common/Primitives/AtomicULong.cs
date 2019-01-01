@@ -16,11 +16,15 @@
         }
 
         /// <inheritdoc />
-        protected override ulong FromLong(long backingValue) =>
-            unchecked((ulong)backingValue);
+        protected override ulong FromLong(long backingValue)
+        {
+            return unchecked((ulong) backingValue);
+        }
 
         /// <inheritdoc />
-        protected override long ToLong(ulong value) =>
-            unchecked((long)value);
+        protected override long ToLong(ulong value)
+        {
+            return unchecked((long) value);
+        }
     }
 }

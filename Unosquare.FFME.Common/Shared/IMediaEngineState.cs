@@ -3,6 +3,7 @@ namespace Unosquare.FFME.Shared
 {
     using System;
     using System.Collections.ObjectModel;
+    using Unosquare.FFME.Common.NET4.Shared;
 
     /// <summary>
     /// Provides Media Engine state as read-only properties

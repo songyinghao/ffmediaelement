@@ -64,20 +64,26 @@
         private MemoryCopyStrategy CopyStrategy { get; } = MemoryCopyStrategy.ParallelNative;
 
         /// <inheritdoc />
-        public void FillMemory(IntPtr startAddress, uint length, byte value) =>
+        public void FillMemory(IntPtr startAddress, uint length, byte value)
+        {
             NativeMethods.FillMemory(startAddress, length, value);
+        }
 
         /// <summary>
         /// Zeroes the memory.
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="length">The length.</param>
-        public void ZeroMemory(IntPtr destination, int length) =>
+        public void ZeroMemory(IntPtr destination, int length)
+        {
             NativeMethods.ZeroMemory(destination, length);
+        }
 
         /// <inheritdoc />
-        public bool SetDllDirectory(string path) =>
-            NativeMethods.SetDllDirectory(path);
+        public bool SetDllDirectory(string path)
+        {
+            return NativeMethods.SetDllDirectory(path);
+        }
 
         /// <inheritdoc />
         public unsafe void CopyMemory(IntPtr targetAddress, IntPtr sourceAddress, uint copyLength)
@@ -98,7 +104,8 @@
 
                 default:
                     {
-                        Buffer.MemoryCopy((void*)sourceAddress, (void*)targetAddress, copyLength, copyLength);
+                        //Buffer.MemoryCopy((void*)sourceAddress, (void*)targetAddress, copyLength, copyLength);
+                        NativeMethods.CopyMemory(targetAddress, sourceAddress, copyLength);
                         break;
                     }
             }

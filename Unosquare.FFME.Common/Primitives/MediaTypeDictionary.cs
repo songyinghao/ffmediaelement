@@ -28,8 +28,8 @@
         /// <returns>The item</returns>
         public new TValue this[MediaType key]
         {
-            get => ContainsKey(key) == false ? default : base[key];
-            internal set => base[key] = value;
+            get { return ContainsKey(key) == false ? default(TValue) : base[key]; }
+            internal set { base[key] = value; }
         }
     }
 }

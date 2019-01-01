@@ -186,7 +186,7 @@
                     else
                     {
                         border.BorderBrush = null;
-                        border.BorderThickness = default;
+                        border.BorderThickness = default(Thickness);
                     }
                 }
             }

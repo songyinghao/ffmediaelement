@@ -63,7 +63,9 @@
         }
 
         /// <inheritdoc />
-        public void HandleFFmpegLogMessage(MediaLogMessage message) =>
+        public void HandleFFmpegLogMessage(MediaLogMessage message)
+        {
             MediaElement.RaiseFFmpegMessageLogged(typeof(MediaElement), message);
+        }
     }
 }

@@ -155,7 +155,10 @@
         }
 
         /// <inheritdoc />
-        public void Dispose() => Dispose(true);
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.

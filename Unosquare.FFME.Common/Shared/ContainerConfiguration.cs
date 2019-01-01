@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using Unosquare.FFME.Common.NET4.Shared;
 
     /// <summary>
     /// Represents a set of options that are used to initialize a media container before opening the stream.
@@ -57,11 +58,17 @@
         /// <summary>
         /// Gets a list of global options for the demuxers. These options apply to all demuxers.
         /// </summary>
-        public ReadOnlyCollection<OptionMeta> GlobalOptionsMeta => MediaEngine.InputFormatOptionsGlobal;
+        public ReadOnlyCollection<OptionMeta> GlobalOptionsMeta
+        {
+            get { return MediaEngine.InputFormatOptionsGlobal; }
+        }
 
         /// <summary>
         /// Retrieves a dictionary of private options available to each of the registered demuxers.
         /// </summary>
-        public ReadOnlyDictionary<string, ReadOnlyCollection<OptionMeta>> PrivateOptionsMeta => MediaEngine.InputFormatOptions;
+        public ReadOnlyDictionary<string, ReadOnlyCollection<OptionMeta>> PrivateOptionsMeta
+        {
+            get { return MediaEngine.InputFormatOptions; }
+        }
     }
 }

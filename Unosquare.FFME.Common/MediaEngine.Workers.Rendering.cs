@@ -169,7 +169,7 @@
         /// <summary>
         /// Stops the block rendering worker.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void StopBlockRenderingWorker()
         {
             if (BlockRenderingWorkerExit == null)

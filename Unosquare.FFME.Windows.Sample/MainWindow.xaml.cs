@@ -58,7 +58,10 @@
         /// <summary>
         /// A proxy, strongly-typed property to the underlying DataContext
         /// </summary>
-        public RootViewModel ViewModel => DataContext as RootViewModel;
+        public RootViewModel ViewModel
+        {
+            get { return DataContext as RootViewModel; }
+        }
 
         #endregion
 
@@ -108,7 +111,8 @@
                     Cursor = Cursors.None;
 
                     // ReSharper disable once InvertIf
-                    if (FindResource("HideControlOpacity") is Storyboard sb)
+                    Storyboard sb = FindResource("HideControlOpacity") as Storyboard;
+                    if (sb != null)
                     {
                         Storyboard.SetTarget(sb, ControllerPanel);
                         sb.Begin();
@@ -120,7 +124,8 @@
                     Cursor = Cursors.Arrow;
 
                     // ReSharper disable once InvertIf
-                    if (FindResource("ShowControlOpacity") is Storyboard sb)
+                    Storyboard sb = FindResource("ShowControlOpacity") as Storyboard;
+                    if (sb != null)
                     {
                         Storyboard.SetTarget(sb, ControllerPanel);
                         sb.Begin();
@@ -173,8 +178,10 @@
             Loaded -= OnWindowLoaded;
 
             // Compute and Apply Sizing Properties
-            if (Content is UIElement contentElement &&
-                VisualTreeHelper.GetParent(contentElement) is ContentPresenter presenter)
+            var contentElement = Content as UIElement;
+            ContentPresenter presenter;
+            if (contentElement != null &&
+                (presenter = VisualTreeHelper.GetParent(contentElement) as ContentPresenter ) != null)
             {
                 presenter.MinWidth = MinWidth;
                 presenter.MinHeight = MinHeight;

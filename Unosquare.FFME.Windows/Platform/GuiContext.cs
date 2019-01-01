@@ -1,4 +1,6 @@
-﻿namespace Unosquare.FFME.Platform
+﻿using Unosquare.Threading;
+
+namespace Unosquare.FFME.Platform
 {
     using Primitives;
     using System;
@@ -102,24 +104,28 @@
         /// <param name="priority">The priority.</param>
         /// <param name="callback">The callback.</param>
         /// <returns>The awaitable task</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public async Task InvokeAsync(DispatcherPriority priority, Action callback) =>
+        [MethodImpl(256)]
+        public async Task InvokeAsync(DispatcherPriority priority, Action callback)
+        {
             await InvokeAsyncInternal(priority, callback, null).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Invokes a task on the GUI thread
         /// </summary>
         /// <param name="callback">The callback.</param>
         /// <returns>The awaitable task</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public async Task InvokeAsync(Action callback) =>
+        [MethodImpl(256)]
+        public async Task InvokeAsync(Action callback)
+        {
             await InvokeAsyncInternal(DispatcherPriority.DataBind, callback, null).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Invokes a task on the GUI thread
         /// </summary>
         /// <param name="callback">The callback.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public void EnqueueInvoke(Action callback)
         {
 #pragma warning disable 4014
@@ -132,7 +138,7 @@
         /// </summary>
         /// <param name="priority">The priority.</param>
         /// <param name="callback">The callback.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public void EnqueueInvoke(DispatcherPriority priority, Action callback)
         {
 #pragma warning disable 4014
@@ -147,7 +153,7 @@
         /// <param name="callback">The callback.</param>
         /// <param name="arguments">The arguments.</param>
         /// <returns>The awaitable task.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private async Task InvokeAsyncInternal(DispatcherPriority priority, Delegate callback, params object[] arguments)
         {
             if (Thread == Thread.CurrentThread)
@@ -163,7 +169,7 @@
                 {
                     case GuiContextType.WPF:
                     {
-                        await GuiDispatcher.InvokeAsync(() => { callback.DynamicInvoke(arguments); }, priority);
+                        await TaskEx.Run(() => { GuiDispatcher.Invoke(priority, new Action(() => { callback.DynamicInvoke(arguments); })); });
                         return;
                     }
 

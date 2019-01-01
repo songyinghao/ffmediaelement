@@ -23,8 +23,8 @@
         /// </summary>
         public string MediaUrl
         {
-            get => m_MediaUrl;
-            set => SetProperty(ref m_MediaUrl, value);
+            get { return m_MediaUrl; }
+            set { SetProperty(ref m_MediaUrl, value); }
         }
 
         /// <summary>
@@ -32,8 +32,8 @@
         /// </summary>
         public string Title
         {
-            get => m_Title;
-            set => SetProperty(ref m_Title, value);
+            get { return m_Title; }
+            set { SetProperty(ref m_Title, value); }
         }
 
         /// <summary>
@@ -41,8 +41,8 @@
         /// </summary>
         public TimeSpan Duration
         {
-            get => m_Duration;
-            set => SetProperty(ref m_Duration, value);
+            get { return m_Duration; }
+            set { SetProperty(ref m_Duration, value); }
         }
 
         /// <summary>

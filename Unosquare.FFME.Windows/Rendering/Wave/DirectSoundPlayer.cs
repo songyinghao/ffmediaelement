@@ -70,7 +70,10 @@
         #region Properties
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => Renderer?.MediaCore;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return Renderer?.MediaCore; }
+        }
 
         /// <inheritdoc />
         public AudioRenderer Renderer { get; }
@@ -79,7 +82,10 @@
         public PlaybackState PlaybackState { get; private set; } = PlaybackState.Stopped;
 
         /// <inheritdoc />
-        public bool IsRunning => !IsDisposed && !IsCancellationPending.Value && !PlaybackFinished.IsCompleted;
+        public bool IsRunning
+        {
+            get { return !IsDisposed && !IsCancellationPending.Value && !PlaybackFinished.IsCompleted; }
+        }
 
         /// <inheritdoc />
         public int DesiredLatency { get; }
@@ -92,8 +98,8 @@
         /// </value>
         public bool IsDisposed
         {
-            get => m_IsDisposed.Value;
-            private set => m_IsDisposed.Value = value;
+            get { return m_IsDisposed.Value; }
+            private set { m_IsDisposed.Value = value; }
         }
 
         #endregion
@@ -134,10 +140,16 @@
         }
 
         /// <inheritdoc />
-        public void Clear() => ClearBackBuffer();
+        public void Clear()
+        {
+            ClearBackBuffer();
+        }
 
         /// <inheritdoc />
-        public void Dispose() => Dispose(true);
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         #endregion
 
@@ -165,8 +177,8 @@
                 device.Guid = new Guid(guidBytes);
             }
 
-            device.Description = descriptionPtr != IntPtr.Zero ? Marshal.PtrToStringAnsi(descriptionPtr) : default;
-            device.ModuleName = modulePtr != IntPtr.Zero ? Marshal.PtrToStringAnsi(modulePtr) : default;
+            device.Description = descriptionPtr != IntPtr.Zero ? Marshal.PtrToStringAnsi(descriptionPtr) : default(string);
+            device.ModuleName = modulePtr != IntPtr.Zero ? Marshal.PtrToStringAnsi(modulePtr) : default(string);
 
             EnumeratedDevices.Add(device);
             return true;
@@ -178,12 +190,14 @@
         /// <param name="eventHandle">The event handle.</param>
         /// <param name="offset">The offset.</param>
         /// <returns>A DirectSound Position Notification</returns>
-        private static DirectSound.DirectSoundBufferPositionNotify CreatePositionNotification(WaitHandle eventHandle, uint offset) =>
-            new DirectSound.DirectSoundBufferPositionNotify
+        private static DirectSound.DirectSoundBufferPositionNotify CreatePositionNotification(WaitHandle eventHandle, uint offset)
+        {
+            return new DirectSound.DirectSoundBufferPositionNotify
             {
                 Offset = offset,
                 NotifyHandle = eventHandle.SafeWaitHandle.DangerousGetHandle()
             };
+        }
 
         /// <summary>
         /// Initializes the direct sound.
@@ -206,7 +220,7 @@
             // Fill BufferDescription for immediate, rendering buffer
             var renderBuffer = new DirectSound.BufferDescription
             {
-                Size = Marshal.SizeOf<DirectSound.BufferDescription>(),
+                Size = Marshal.SizeOf(typeof(DirectSound.BufferDescription)),
                 BufferBytes = 0,
                 Flags = DirectSound.DirectSoundBufferCaps.PrimaryBuffer,
                 Reserved = 0,
@@ -215,7 +229,8 @@
             };
 
             // Create the Render Buffer (Immediate audio out)
-            DirectSoundDriver.CreateSoundBuffer(renderBuffer, out var audioRenderBuffer, IntPtr.Zero);
+            object audioRenderBuffer;
+            DirectSoundDriver.CreateSoundBuffer(renderBuffer, out audioRenderBuffer, IntPtr.Zero);
             AudioRenderBuffer = audioRenderBuffer as DirectSound.IDirectSoundBuffer;
 
             // Play & Loop on the render buffer
@@ -228,7 +243,7 @@
             // Fill BufferDescription for sample-receiving back buffer
             var backBuffer = new DirectSound.BufferDescription
             {
-                Size = Marshal.SizeOf<DirectSound.BufferDescription>(),
+                Size = Marshal.SizeOf(typeof(DirectSound.BufferDescription)),
                 BufferBytes = (uint)(SamplesFrameSize * 2),
                 Flags = DirectSound.DirectSoundBufferCaps.GetCurrentPosition2
                         | DirectSound.DirectSoundBufferCaps.ControlNotifyPosition
@@ -247,7 +262,7 @@
             waveFormatHandle.Free();
 
             // Get effective SecondaryBuffer size
-            var bufferCapabilities = new DirectSound.BufferCaps { Size = Marshal.SizeOf<DirectSound.BufferCaps>() };
+            var bufferCapabilities = new DirectSound.BufferCaps { Size = Marshal.SizeOf(typeof(DirectSound.BufferCaps)) };
             AudioBackBuffer?.GetCaps(bufferCapabilities);
 
             NextSamplesWriteIndex = 0;
@@ -362,8 +377,10 @@
         /// <returns>
         /// <c>true</c> if [is buffer lost]; otherwise, <c>false</c>.
         /// </returns>
-        private bool IsBufferLost() =>
-            AudioBackBuffer.GetStatus().HasFlag(DirectSound.DirectSoundBufferStatus.BufferLost);
+        private bool IsBufferLost()
+        {
+            return AudioBackBuffer.GetStatus().HasFlag(DirectSound.DirectSoundBufferStatus.BufferLost);
+        }
 
         /// <summary>
         /// Convert ms to bytes size according to WaveFormat
@@ -399,12 +416,16 @@
             var silence = new byte[SamplesTotalSize];
 
             // Lock the SecondaryBuffer
+            IntPtr wavBuffer1;
+            int nbSamples1;
+            IntPtr wavBuffer2;
+            int nbSamples2;
             AudioBackBuffer.Lock(0,
                 (uint)SamplesTotalSize,
-                out var wavBuffer1,
-                out var nbSamples1,
-                out var wavBuffer2,
-                out var nbSamples2,
+                out wavBuffer1,
+                out nbSamples1,
+                out wavBuffer2,
+                out nbSamples2,
                 DirectSound.DirectSoundBufferLockFlag.None);
 
             // Copy silence data to the SecondaryBuffer
@@ -443,12 +464,16 @@
             }
 
             // Lock a portion of the SecondaryBuffer (starting from 0 or 1/2 the buffer)
+            IntPtr wavBuffer1;
+            int nbSamples1;
+            IntPtr wavBuffer2;
+            int nbSamples2;
             AudioBackBuffer.Lock(NextSamplesWriteIndex,
                 (uint)bytesRead,  // (uint)bytesToCopy,
-                out var wavBuffer1,
-                out var nbSamples1,
-                out var wavBuffer2,
-                out var nbSamples2,
+                out wavBuffer1,
+                out nbSamples1,
+                out wavBuffer2,
+                out nbSamples2,
                 DirectSound.DirectSoundBufferLockFlag.None);
 
             // Copy back to the SecondaryBuffer
@@ -653,7 +678,10 @@
                 public IntPtr NotifyHandle;
 
                 /// <inheritdoc />
-                public bool Equals(DirectSoundBufferPositionNotify other) => NotifyHandle == other.NotifyHandle;
+                public bool Equals(DirectSoundBufferPositionNotify other)
+                {
+                    return NotifyHandle == other.NotifyHandle;
+                }
             }
 
             // ReSharper disable NotAccessedField.Local

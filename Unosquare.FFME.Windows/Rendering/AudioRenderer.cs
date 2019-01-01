@@ -53,7 +53,11 @@
         /// <param name="mediaCore">The core media engine.</param>
         public AudioRenderer(MediaEngine mediaCore)
         {
-            MediaCore = mediaCore ?? throw new ArgumentNullException(nameof(mediaCore));
+            if (mediaCore == null)
+            {
+                throw new ArgumentNullException(nameof(mediaCore));
+            }
+            MediaCore = mediaCore;
 
             WaveFormat = new WaveFormat(
                 Constants.Audio.SampleRate,
@@ -72,12 +76,18 @@
         #region Properties
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => MediaCore;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return MediaCore; }
+        }
 
         /// <summary>
         /// Gets the parent media element (platform specific).
         /// </summary>
-        public MediaElement MediaElement => MediaCore.Parent as MediaElement;
+        public MediaElement MediaElement
+        {
+            get { return MediaCore.Parent as MediaElement; }
+        }
 
         /// <inheritdoc />
         public MediaEngine MediaCore { get; }
@@ -167,9 +177,10 @@
                 var audioBlock = (AudioBlock)mediaBlock;
                 var audioBlocks = MediaCore.Blocks[MediaType.Audio];
 
+                IDisposable readLock;
                 while (audioBlock != null)
                 {
-                    if (audioBlock.TryAcquireReaderLock(out var readLock) == false)
+                    if (audioBlock.TryAcquireReaderLock(out readLock) == false)
                         return;
 
                     using (readLock)
@@ -274,7 +285,10 @@
         }
 
         /// <inheritdoc />
-        public void WaitForReadyState() => WaitForReadyEvent?.Wait();
+        public void WaitForReadyState()
+        {
+            WaitForReadyEvent?.Wait();
+        }
 
         /// <inheritdoc />
         public void Dispose()
@@ -482,7 +496,7 @@
         /// <returns>
         /// True to continue processing. False to write silence.
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private bool Synchronize(byte[] targetBuffer, int targetBufferOffset, int requestedBytes, double speedRatio)
         {
             #region Documentation
@@ -636,7 +650,7 @@
         /// </summary>
         /// <param name="requestedBytes">The requested bytes.</param>
         /// <param name="speedRatio">The speed ratio.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void ReadAndSlowDown(int requestedBytes, double speedRatio)
         {
             var bytesToRead = Math.Min(
@@ -674,7 +688,7 @@
         /// <param name="requestedBytes">The requested number of bytes.</param>
         /// <param name="computeAverage">if set to <c>true</c> average samples per block. Otherwise, take the first sample per block only</param>
         /// <param name="speedRatio">The speed ratio.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void ReadAndSpeedUp(int requestedBytes, bool computeAverage, double speedRatio)
         {
             var bytesToRead = Convert.ToInt32((requestedBytes * speedRatio).ToMultipleOf(SampleBlockSize));
@@ -759,7 +773,7 @@
         /// </summary>
         /// <param name="requestedBytes">The requested bytes.</param>
         /// <param name="speedRatio">The speed ratio.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void ReadAndUseAudioProcessor(int requestedBytes, double speedRatio)
         {
             if (AudioProcessorBuffer == null || AudioProcessorBuffer.Length < Convert.ToInt32(requestedBytes * Constants.Controller.MaxSpeedRatio))
@@ -796,7 +810,7 @@
         /// <param name="targetBuffer">The target buffer.</param>
         /// <param name="targetBufferOffset">The target buffer offset.</param>
         /// <param name="requestedBytes">The requested number of bytes.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void ApplyVolumeAndBalance(byte[] targetBuffer, int targetBufferOffset, int requestedBytes)
         {
             // Check if we are muted. We don't need process volume and balance

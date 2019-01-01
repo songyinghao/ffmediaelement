@@ -52,7 +52,10 @@
         #region Properties
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => Renderer?.MediaCore;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return Renderer?.MediaCore; }
+        }
 
         /// <inheritdoc />
         public AudioRenderer Renderer { get; }
@@ -78,7 +81,10 @@
         public PlaybackState PlaybackState { get; private set; } = PlaybackState.Stopped;
 
         /// <inheritdoc />
-        public bool IsRunning => !IsDisposed && !IsCancellationPending.Value && !PlaybackFinished.IsCompleted;
+        public bool IsRunning
+        {
+            get { return !IsDisposed && !IsCancellationPending.Value && !PlaybackFinished.IsCompleted; }
+        }
 
         /// <summary>
         /// Gets the capabilities.
@@ -93,8 +99,8 @@
         /// </value>
         public bool IsDisposed
         {
-            get => m_IsDisposed.Value;
-            private set => m_IsDisposed.Value = value;
+            get { return m_IsDisposed.Value; }
+            private set { m_IsDisposed.Value = value; }
         }
 
         #endregion

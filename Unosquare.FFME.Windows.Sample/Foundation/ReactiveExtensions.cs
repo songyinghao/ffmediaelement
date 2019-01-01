@@ -108,7 +108,10 @@
                 // placeholder
             }
 
-            public new Action Target => IsAlive ? base.Target as Action : null;
+            public new Action Target
+            {
+                get { return IsAlive ? base.Target as Action : null; }
+            }
         }
     }
 }

@@ -190,8 +190,8 @@ namespace Unosquare.FFME.Rendering
         [Description("Gets or sets the text contents of this text block.")]
         public string Text
         {
-            get => GetValue(TextProperty) as string;
-            set => SetValue(TextProperty, value);
+            get { return GetValue(TextProperty) as string; }
+            set { SetValue(TextProperty, value); }
         }
 
         /// <summary>
@@ -201,8 +201,8 @@ namespace Unosquare.FFME.Rendering
         [Description("Gets or sets the text contents of this text block.")]
         public Brush TextForeground
         {
-            get => GetValue(TextForegroundProperty) as Brush;
-            set => SetValue(TextForegroundProperty, value);
+            get { return GetValue(TextForegroundProperty) as Brush; }
+            set { SetValue(TextForegroundProperty, value); }
         }
 
         /// <summary>
@@ -212,8 +212,8 @@ namespace Unosquare.FFME.Rendering
         [Description("Gets or sets the text outline brush.")]
         public Brush TextOutline
         {
-            get => GetValue(TextOutlineProperty) as Brush;
-            set => SetValue(TextOutlineProperty, value);
+            get { return GetValue(TextOutlineProperty) as Brush; }
+            set { SetValue(TextOutlineProperty, value); }
         }
 
         /// <summary>
@@ -223,8 +223,8 @@ namespace Unosquare.FFME.Rendering
         [Description("Gets or sets the text outline width.")]
         public Thickness TextOutlineWidth
         {
-            get => (Thickness)GetValue(TextOutlineWidthProperty);
-            set => SetValue(TextOutlineWidthProperty, value);
+            get { return (Thickness) GetValue(TextOutlineWidthProperty); }
+            set { SetValue(TextOutlineWidthProperty, value); }
         }
 
         /// <summary>
@@ -234,8 +234,8 @@ namespace Unosquare.FFME.Rendering
         [Description("Gets or sets the text foreground effect. It's a smooth drop shadow by default.")]
         public Effect TextForegroundEffect
         {
-            get => GetValue(TextForegroundEffectProperty) as Effect;
-            set => SetValue(TextForegroundEffectProperty, value);
+            get { return GetValue(TextForegroundEffectProperty) as Effect; }
+            set { SetValue(TextForegroundEffectProperty, value); }
         }
 
         #endregion
@@ -275,7 +275,7 @@ namespace Unosquare.FFME.Rendering
         /// <returns>A thickness depending on the block type</returns>
         private static Thickness ComputeMargin(Block blockType, Thickness outlineWidth)
         {
-            if (blockType == Block.Foreground) return default;
+            if (blockType == Block.Foreground) return default(Thickness);
 
             var topMargin = 0d;
             var leftMargin = 0d;
@@ -296,15 +296,18 @@ namespace Unosquare.FFME.Rendering
         /// Gets the default text foreground effect
         /// </summary>
         /// <returns>A new instance of a foreground effect.</returns>
-        private static Effect GetDefaultTextForegroundEffect() => new DropShadowEffect
+        private static Effect GetDefaultTextForegroundEffect()
         {
-            BlurRadius = 4,
-            Color = Colors.Black,
-            Direction = 315,
-            Opacity = 0.75,
-            RenderingBias = RenderingBias.Performance,
-            ShadowDepth = 6
-        };
+            return new DropShadowEffect
+            {
+                BlurRadius = 4,
+                Color = Colors.Black,
+                Direction = 315,
+                Opacity = 0.75,
+                RenderingBias = RenderingBias.Performance,
+                ShadowDepth = 6
+            };
+        }
 
         #endregion
 

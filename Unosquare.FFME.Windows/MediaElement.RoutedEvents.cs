@@ -62,7 +62,7 @@
             EventManager.RegisterRoutedEvent(
                             nameof(MediaFailed),
                             RoutingStrategy.Bubble,
-                            typeof(EventHandler<ExceptionRoutedEventArgs>),
+                            typeof(EventHandler<Events.ExceptionRoutedEventArgs>),
                             typeof(MediaElement));
 
         /// <summary>
@@ -144,8 +144,8 @@
         /// </summary>
         public event RoutedEventHandler BufferingStarted
         {
-            add => AddHandler(BufferingStartedEvent, value);
-            remove => RemoveHandler(BufferingStartedEvent, value);
+            add { AddHandler(BufferingStartedEvent, value); }
+            remove { RemoveHandler(BufferingStartedEvent, value); }
         }
 
         /// <summary>
@@ -153,8 +153,8 @@
         /// </summary>
         public event RoutedEventHandler BufferingEnded
         {
-            add => AddHandler(BufferingEndedEvent, value);
-            remove => RemoveHandler(BufferingEndedEvent, value);
+            add { AddHandler(BufferingEndedEvent, value); }
+            remove { RemoveHandler(BufferingEndedEvent, value); }
         }
 
         /// <summary>
@@ -162,8 +162,8 @@
         /// </summary>
         public event RoutedEventHandler SeekingStarted
         {
-            add => AddHandler(SeekingStartedEvent, value);
-            remove => RemoveHandler(SeekingStartedEvent, value);
+            add { AddHandler(SeekingStartedEvent, value); }
+            remove { RemoveHandler(SeekingStartedEvent, value); }
         }
 
         /// <summary>
@@ -171,8 +171,8 @@
         /// </summary>
         public event RoutedEventHandler SeekingEnded
         {
-            add => AddHandler(SeekingEndedEvent, value);
-            remove => RemoveHandler(SeekingEndedEvent, value);
+            add { AddHandler(SeekingEndedEvent, value); }
+            remove { RemoveHandler(SeekingEndedEvent, value); }
         }
 
         /// <summary>
@@ -180,8 +180,8 @@
         /// </summary>
         public event EventHandler<MediaOpenedRoutedEventArgs> MediaOpened
         {
-            add => AddHandler(MediaOpenedEvent, value);
-            remove => RemoveHandler(MediaOpenedEvent, value);
+            add { AddHandler(MediaOpenedEvent, value); }
+            remove { RemoveHandler(MediaOpenedEvent, value); }
         }
 
         /// <summary>
@@ -190,8 +190,8 @@
         /// </summary>
         public event RoutedEventHandler MediaReady
         {
-            add => AddHandler(MediaReadyEvent, value);
-            remove => RemoveHandler(MediaReadyEvent, value);
+            add { AddHandler(MediaReadyEvent, value); }
+            remove { RemoveHandler(MediaReadyEvent, value); }
         }
 
         /// <summary>
@@ -199,8 +199,8 @@
         /// </summary>
         public event EventHandler<MediaOpenedRoutedEventArgs> MediaChanged
         {
-            add => AddHandler(MediaChangedEvent, value);
-            remove => RemoveHandler(MediaChangedEvent, value);
+            add { AddHandler(MediaChangedEvent, value); }
+            remove { RemoveHandler(MediaChangedEvent, value); }
         }
 
         /// <summary>
@@ -208,8 +208,8 @@
         /// </summary>
         public event RoutedEventHandler MediaClosed
         {
-            add => AddHandler(MediaClosedEvent, value);
-            remove => RemoveHandler(MediaClosedEvent, value);
+            add { AddHandler(MediaClosedEvent, value); }
+            remove { RemoveHandler(MediaClosedEvent, value); }
         }
 
         /// <summary>
@@ -217,8 +217,8 @@
         /// </summary>
         public event RoutedEventHandler MediaEnded
         {
-            add => AddHandler(MediaEndedEvent, value);
-            remove => RemoveHandler(MediaEndedEvent, value);
+            add { AddHandler(MediaEndedEvent, value); }
+            remove { RemoveHandler(MediaEndedEvent, value); }
         }
 
         /// <summary>
@@ -226,8 +226,8 @@
         /// </summary>
         public event EventHandler<PositionChangedRoutedEventArgs> PositionChanged
         {
-            add => AddHandler(PositionChangedEvent, value);
-            remove => RemoveHandler(PositionChangedEvent, value);
+            add { AddHandler(PositionChangedEvent, value); }
+            remove { RemoveHandler(PositionChangedEvent, value); }
         }
 
         /// <summary>
@@ -235,17 +235,17 @@
         /// </summary>
         public event EventHandler<MediaStateChangedRoutedEventArgs> MediaStateChanged
         {
-            add => AddHandler(MediaStateChangedEvent, value);
-            remove => RemoveHandler(MediaStateChangedEvent, value);
+            add { AddHandler(MediaStateChangedEvent, value); }
+            remove { RemoveHandler(MediaStateChangedEvent, value); }
         }
 
         /// <summary>
         /// Raised when the media fails to load or a fatal error has occurred which prevents playback.
         /// </summary>
-        public event EventHandler<ExceptionRoutedEventArgs> MediaFailed
+        public event EventHandler<Events.ExceptionRoutedEventArgs> MediaFailed
         {
-            add => AddHandler(MediaFailedEvent, value);
-            remove => RemoveHandler(MediaFailedEvent, value);
+            add { AddHandler(MediaFailedEvent, value); }
+            remove { RemoveHandler(MediaFailedEvent, value); }
         }
 
         #endregion
@@ -260,11 +260,12 @@
         /// <param name="sender">The sender.</param>
         /// <param name="errorException">The error exception.</param>
         /// <returns>The event arguments</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ExceptionRoutedEventArgs CreateExceptionRoutedEventArgs(RoutedEvent routedEvent, object sender, Exception errorException)
+        [MethodImpl(256)]
+        internal static Events.ExceptionRoutedEventArgs CreateExceptionRoutedEventArgs(RoutedEvent routedEvent, object sender, Exception errorException)
         {
-            var constructor = (typeof(ExceptionRoutedEventArgs) as TypeInfo)?.DeclaredConstructors.First();
-            return constructor?.Invoke(new[] { routedEvent, sender, errorException }) as ExceptionRoutedEventArgs;
+            //var constructor = (typeof(ExceptionRoutedEventArgs) as TypeInfo)?.DeclaredConstructors.First();
+            //return constructor?.Invoke(new[] { routedEvent, sender, errorException }) as ExceptionRoutedEventArgs;
+            return new Events.ExceptionRoutedEventArgs(routedEvent, sender, errorException);
         }
 
         #endregion
@@ -276,44 +277,54 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="MediaLogMessage"/> instance containing the event data.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void RaiseFFmpegMessageLogged(object sender, MediaLogMessage e) =>
+        [MethodImpl(256)]
+        internal static void RaiseFFmpegMessageLogged(object sender, MediaLogMessage e)
+        {
             FFmpegMessageLogged?.Invoke(sender, new MediaLogMessageEventArgs(e));
+        }
 
         /// <summary>
         /// Raises the message logged event.
         /// </summary>
         /// <param name="e">The <see cref="MediaLogMessage"/> instance containing the event data.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void RaiseMessageLoggedEvent(MediaLogMessage e) =>
+        [MethodImpl(256)]
+        internal void RaiseMessageLoggedEvent(MediaLogMessage e)
+        {
             MessageLogged?.Invoke(this, new MediaLogMessageEventArgs(e));
+        }
 
         /// <summary>
         /// Raises the media initializing event.
         /// </summary>
         /// <param name="config">The container configuration options.</param>
         /// <param name="url">The URL.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void RaiseMediaInitializingEvent(ContainerConfiguration config, string url) =>
+        [MethodImpl(256)]
+        internal void RaiseMediaInitializingEvent(ContainerConfiguration config, string url)
+        {
             MediaInitializing?.Invoke(this, new MediaInitializingEventArgs(config, url));
+        }
 
         /// <summary>
         /// Raises the media opening event.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="mediaInfo">The media information.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void RaiseMediaOpeningEvent(MediaOptions options, MediaInfo mediaInfo) =>
+        [MethodImpl(256)]
+        internal void RaiseMediaOpeningEvent(MediaOptions options, MediaInfo mediaInfo)
+        {
             MediaOpening?.Invoke(this, new MediaOpeningEventArgs(options, mediaInfo));
+        }
 
         /// <summary>
         /// Raises the media changing event.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="mediaInfo">The media information.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void RaiseMediaChangingEvent(MediaOptions options, MediaInfo mediaInfo) =>
+        [MethodImpl(256)]
+        internal void RaiseMediaChangingEvent(MediaOptions options, MediaInfo mediaInfo)
+        {
             MediaChanging?.Invoke(this, new MediaOpeningEventArgs(options, mediaInfo));
+        }
 
         #endregion
 
@@ -323,7 +334,7 @@
         /// Raises the media failed event.
         /// </summary>
         /// <param name="ex">The ex.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostMediaFailedEvent(Exception ex)
         {
             LogEventStart(MediaFailedEvent);
@@ -339,7 +350,7 @@
         /// Raises the media opened event.
         /// </summary>
         /// <param name="mediaInfo">The media information.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostMediaOpenedEvent(MediaInfo mediaInfo)
         {
             LogEventStart(MediaOpenedEvent);
@@ -354,7 +365,7 @@
         /// <summary>
         /// Raises the media ready event.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostMediaReadyEvent()
         {
             LogEventStart(MediaReadyEvent);
@@ -368,7 +379,7 @@
         /// <summary>
         /// Raises the media closed event.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostMediaClosedEvent()
         {
             LogEventStart(MediaClosedEvent);
@@ -383,7 +394,7 @@
         /// Raises the media changed event.
         /// </summary>
         /// <param name="mediaInfo">The media information.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostMediaChangedEvent(MediaInfo mediaInfo)
         {
             LogEventStart(MediaChangedEvent);
@@ -400,7 +411,7 @@
         /// </summary>
         /// <param name="oldValue">The old value.</param>
         /// <param name="newValue">The new value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostPositionChangedEvent(TimeSpan oldValue, TimeSpan newValue)
         {
             // Event logging disabled because this happens too often.
@@ -416,7 +427,7 @@
         /// </summary>
         /// <param name="oldValue">The old value.</param>
         /// <param name="newValue">The new value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostMediaStateChangedEvent(MediaState oldValue, MediaState newValue)
         {
             LogEventStart(MediaStateChangedEvent);
@@ -431,7 +442,7 @@
         /// <summary>
         /// Raises the buffering started event.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostBufferingStartedEvent()
         {
             LogEventStart(BufferingStartedEvent);
@@ -445,7 +456,7 @@
         /// <summary>
         /// Raises the buffering ended event.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostBufferingEndedEvent()
         {
             LogEventStart(BufferingEndedEvent);
@@ -459,7 +470,7 @@
         /// <summary>
         /// Raises the Seeking started event.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostSeekingStartedEvent()
         {
             LogEventStart(SeekingStartedEvent);
@@ -473,7 +484,7 @@
         /// <summary>
         /// Raises the Seeking ended event.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostSeekingEndedEvent()
         {
             LogEventStart(SeekingEndedEvent);
@@ -487,7 +498,7 @@
         /// <summary>
         /// Raises the media ended event.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void PostMediaEndedEvent()
         {
             LogEventStart(MediaEndedEvent);
@@ -504,9 +515,11 @@
         /// <param name="propertyName">Name of the property used to notify listeners.  This
         /// value is optional and can be provided automatically when invoked from compilers
         /// that support <see cref="CallerMemberNameAttribute"/>.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void NotifyPropertyChangedEvent(string propertyName) =>
+        [MethodImpl(256)]
+        internal void NotifyPropertyChangedEvent(string propertyName)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         #endregion
 
@@ -516,7 +529,7 @@
         /// Logs the start of an event
         /// </summary>
         /// <param name="e">The event.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void LogEventStart(RoutedEvent e)
         {
             if (WindowsPlatform.Instance.IsInDebugMode)
@@ -527,7 +540,7 @@
         /// Logs the end of an event.
         /// </summary>
         /// <param name="e">The event.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void LogEventDone(RoutedEvent e)
         {
             if (WindowsPlatform.Instance.IsInDebugMode)

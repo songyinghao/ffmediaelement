@@ -34,7 +34,10 @@
         /// <summary>
         /// The custom file scheme (URL prefix) including ://
         /// </summary>
-        public static string Scheme => "customfile://";
+        public static string Scheme
+        {
+            get { return "customfile://"; }
+        }
 
         /// <inheritdoc />
         public Uri StreamUri { get; }
@@ -43,7 +46,10 @@
         public bool CanSeek { get; }
 
         /// <inheritdoc />
-        public int ReadBufferLength => 1024 * 16;
+        public int ReadBufferLength
+        {
+            get { return 1024 * 16; }
+        }
 
         /// <inheritdoc />
         public void Dispose()

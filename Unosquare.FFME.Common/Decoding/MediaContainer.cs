@@ -9,6 +9,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using Unosquare.FFME.Common.NET4.Shared;
 
     /// <summary>
     /// A container capable of opening an input url,
@@ -54,7 +55,7 @@
         /// The stream read interrupt start time.
         /// When a read operation is started, this is set to the ticks of UTC now.
         /// </summary>
-        private readonly AtomicDateTime StreamReadInterruptStartTime = new AtomicDateTime(default);
+        private readonly AtomicDateTime StreamReadInterruptStartTime = new AtomicDateTime(default(DateTime));
 
         /// <summary>
         /// The signal to request the abortion of the following read operation
@@ -173,7 +174,10 @@
         #region Properties
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => m_LoggingHandler;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return m_LoggingHandler; }
+        }
 
         /// <summary>
         /// To detect redundant Dispose calls
@@ -214,7 +218,10 @@
         /// <summary>
         /// Gets the media bit rate (bits per second). Returns 0 if not available.
         /// </summary>
-        public long MediaBitRate => MediaInfo?.BitRate ?? 0;
+        public long MediaBitRate
+        {
+            get { return MediaInfo?.BitRate ?? 0; }
+        }
 
         /// <summary>
         /// Holds the metadata of the media file when the stream is initialized.
@@ -224,12 +231,18 @@
         /// <summary>
         /// Gets a value indicating whether an Input Context has been initialize.
         /// </summary>
-        public bool IsInitialized => InputContext != null;
+        public bool IsInitialized
+        {
+            get { return InputContext != null; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this instance is open.
         /// </summary>
-        public bool IsOpen => IsInitialized && Components.Count > 0;
+        public bool IsOpen
+        {
+            get { return IsInitialized && Components.Count > 0; }
+        }
 
         /// <summary>
         /// Will be set to true whenever an End Of File situation is reached.
@@ -270,13 +283,19 @@
         /// <summary>
         /// Gets a value indicating whether the underlying media is seekable.
         /// </summary>
-        public bool IsStreamSeekable => MediaDuration.Ticks > 0;
+        public bool IsStreamSeekable
+        {
+            get { return MediaDuration.Ticks > 0; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this container represents live media.
         /// If the stream is classified as a network stream and it is not seekable, then this property will return true.
         /// </summary>
-        public bool IsLiveStream => IsNetworkStream && IsStreamSeekable == false;
+        public bool IsLiveStream
+        {
+            get { return IsNetworkStream && IsStreamSeekable == false; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the input stream is a network stream.
@@ -293,7 +312,10 @@
         /// <summary>
         /// Gets a value indicating whether reads are in the aborted state.
         /// </summary>
-        public bool IsReadAborted => SignalAbortReadsRequested.Value;
+        public bool IsReadAborted
+        {
+            get { return SignalAbortReadsRequested.Value; }
+        }
 
         /// <summary>
         /// Gets the media start time by which all component streams are offset.
@@ -645,6 +667,7 @@
                 }
             }
 
+
             try
             {
                 // Create the input format context, and open the input based on the provided format options.
@@ -745,8 +768,8 @@
                     IsNetworkStream = true;
                     ffmpeg.av_read_play(InputContext);
                 }
-
-                if (IsNetworkStream == false && Uri.TryCreate(MediaUrl, UriKind.RelativeOrAbsolute, out var uri))
+                Uri uri;
+                if (IsNetworkStream == false && Uri.TryCreate(MediaUrl, UriKind.RelativeOrAbsolute, out uri))
                 {
                     try { IsNetworkStream = uri.IsFile == false; }
                     catch { IsNetworkStream = true; }
@@ -809,8 +832,8 @@
 
             // Apply the options
             if (opts.EnableReducedBuffering) InputContext->avio_flags |= ffmpeg.AVIO_FLAG_DIRECT;
-            if (opts.PacketSize != default) InputContext->packet_size = System.Convert.ToUInt32(opts.PacketSize);
-            if (opts.ProbeSize != default) InputContext->probesize = opts.ProbeSize <= 32 ? 32 : opts.ProbeSize;
+            if (opts.PacketSize != default(int)) InputContext->packet_size = System.Convert.ToUInt32(opts.PacketSize);
+            if (opts.ProbeSize != default(int)) InputContext->probesize = opts.ProbeSize <= 32 ? 32 : opts.ProbeSize;
 
             // Flags
             InputContext->flags |= opts.FlagDiscardCorrupt ? ffmpeg.AVFMT_FLAG_DISCARD_CORRUPT : InputContext->flags;
@@ -828,7 +851,7 @@
             InputContext->seek2any = opts.SeekToAny ? 1 : 0;
 
             // Handle analyze duration overrides
-            if (opts.MaxAnalyzeDuration != default)
+            if (opts.MaxAnalyzeDuration != default(TimeSpan))
             {
                 InputContext->max_analyze_duration = opts.MaxAnalyzeDuration <= TimeSpan.Zero ? 0 :
                     System.Convert.ToInt64(opts.MaxAnalyzeDuration.TotalSeconds * ffmpeg.AV_TIME_BASE);
@@ -938,7 +961,7 @@
         /// <returns>The type of media packet that was read</returns>
         /// <exception cref="InvalidOperationException">Initialize</exception>
         /// <exception cref="MediaContainerException">Raised when an error reading from the stream occurs.</exception>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private MediaType StreamRead()
         {
             // Check the context has been initialized
@@ -1046,7 +1069,7 @@
         /// <returns>
         /// The list of media frames
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private MediaFrame StreamSeek(TimeSpan targetTimeAbsolute)
         {
             #region Setup
@@ -1098,7 +1121,8 @@
             var indexTimestamp = ffmpeg.AV_NOPTS_VALUE;
 
             // Help the initial position seek time.
-            if (main is VideoComponent videoComponent && videoComponent.SeekIndex.Count > 0)
+            var videoComponent = main as VideoComponent;
+            if (videoComponent != null && videoComponent.SeekIndex.Count > 0)
             {
                 var entryIndex = videoComponent.SeekIndex.StartIndexOf(targetPosition);
                 if (entryIndex >= 0)
@@ -1194,7 +1218,7 @@
         /// Seeks to the position at the start of the stream.
         /// </summary>
         /// <returns>The first frame of the main component.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private MediaFrame StreamSeekToStart()
         {
             var main = Components.Main;
@@ -1228,7 +1252,7 @@
         /// </summary>
         /// <param name="component">The component.</param>
         /// <returns>The next available frame</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private MediaFrame StreamPositionDecode(MediaComponent component)
         {
             while (SignalAbortReadsRequested.Value == false && IsAtEndOfStream == false)

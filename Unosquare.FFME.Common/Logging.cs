@@ -37,7 +37,8 @@
                 {
                     const int MaxMessagesPerCycle = 10;
                     var messageCount = 0;
-                    while (messageCount <= MaxMessagesPerCycle && LogQueue.TryDequeue(out var message))
+                    MediaLogMessage message;
+                    while (messageCount <= MaxMessagesPerCycle && LogQueue.TryDequeue(out message))
                     {
                         message.Handler?.HandleLogMessage(message);
                         messageCount += 1;
@@ -67,8 +68,10 @@
         /// <param name="sender">The logging source.</param>
         /// <param name="aspectName">The apect of the code where the message is coming from.</param>
         /// <param name="message">The message text.</param>
-        public static void LogDebug(this ILoggingSource sender, string aspectName, string message) =>
+        public static void LogDebug(this ILoggingSource sender, string aspectName, string message)
+        {
             Log(sender.LoggingHandler, MediaLogMessageType.Debug, aspectName, message);
+        }
 
         /// <summary>
         /// Logs the specified message
@@ -76,8 +79,10 @@
         /// <param name="sender">The logging source.</param>
         /// <param name="aspectName">The apect of the code where the message is coming from.</param>
         /// <param name="message">The message text.</param>
-        public static void LogInfo(this ILoggingSource sender, string aspectName, string message) =>
+        public static void LogInfo(this ILoggingSource sender, string aspectName, string message)
+        {
             Log(sender.LoggingHandler, MediaLogMessageType.Info, aspectName, message);
+        }
 
         /// <summary>
         /// Logs the specified message
@@ -85,8 +90,10 @@
         /// <param name="sender">The logging source.</param>
         /// <param name="aspectName">The apect of the code where the message is coming from.</param>
         /// <param name="message">The message text.</param>
-        public static void LogWarning(this ILoggingSource sender, string aspectName, string message) =>
+        public static void LogWarning(this ILoggingSource sender, string aspectName, string message)
+        {
             Log(sender.LoggingHandler, MediaLogMessageType.Warning, aspectName, message);
+        }
 
         /// <summary>
         /// Logs the specified message
@@ -94,8 +101,10 @@
         /// <param name="sender">The logging source.</param>
         /// <param name="aspectName">The apect of the code where the message is coming from.</param>
         /// <param name="message">The message text.</param>
-        public static void LogTrace(this ILoggingSource sender, string aspectName, string message) =>
+        public static void LogTrace(this ILoggingSource sender, string aspectName, string message)
+        {
             Log(sender.LoggingHandler, MediaLogMessageType.Trace, aspectName, message);
+        }
 
         /// <summary>
         /// Logs the specified message
@@ -103,8 +112,10 @@
         /// <param name="sender">The logging source.</param>
         /// <param name="aspectName">The apect of the code where the message is coming from.</param>
         /// <param name="message">The message text.</param>
-        public static void LogError(this ILoggingSource sender, string aspectName, string message) =>
-           Log(sender.LoggingHandler, MediaLogMessageType.Error, aspectName, message);
+        public static void LogError(this ILoggingSource sender, string aspectName, string message)
+        {
+            Log(sender.LoggingHandler, MediaLogMessageType.Error, aspectName, message);
+        }
 
         /// <summary>
         /// Logs the specified message
@@ -113,9 +124,11 @@
         /// <param name="aspectName">The apect of the code where the message is coming from.</param>
         /// <param name="message">The message text.</param>
         /// <param name="ex">The exception to log.</param>
-        public static void LogError(this ILoggingSource sender, string aspectName, string message, Exception ex) =>
+        public static void LogError(this ILoggingSource sender, string aspectName, string message, Exception ex)
+        {
             Log(sender.LoggingHandler, MediaLogMessageType.Error, aspectName, $"{message}\r\n" +
-                $"{ex?.GetType().Name}: {ex?.Message}\r\nStack Trace:\r\n{ex?.StackTrace}");
+                                                                              $"{ex?.GetType().Name}: {ex?.Message}\r\nStack Trace:\r\n{ex?.StackTrace}");
+        }
 
         #endregion
 
@@ -127,8 +140,10 @@
         /// <param name="loggingHandler">The object that will handle the message output.</param>
         /// <param name="messageType">Type of the message.</param>
         /// <param name="message">The message.</param>
-        internal static void Log(ILoggingHandler loggingHandler, MediaLogMessageType messageType, string message) =>
+        internal static void Log(ILoggingHandler loggingHandler, MediaLogMessageType messageType, string message)
+        {
             Log(loggingHandler, messageType, Aspects.None, message);
+        }
 
         /// <summary>
         /// Logs the specified logging handler.

@@ -53,7 +53,10 @@
         /// <summary>
         /// Gets the pointer to the unmanaged frame.
         /// </summary>
-        internal AVFrame* Pointer => (AVFrame*)InternalPointer;
+        internal AVFrame* Pointer
+        {
+            get { return (AVFrame*) InternalPointer; }
+        }
 
         #endregion
 

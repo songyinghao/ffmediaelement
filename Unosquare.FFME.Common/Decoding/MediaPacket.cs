@@ -32,43 +32,67 @@
         /// <summary>
         /// Gets the <see cref="AVPacket"/> pointer.
         /// </summary>
-        public AVPacket* Pointer => m_IsDisposed.Value ? null : (AVPacket*)m_Pointer;
+        public AVPacket* Pointer
+        {
+            get { return m_IsDisposed.Value ? null : (AVPacket*) m_Pointer; }
+        }
 
         /// <summary>
         /// Gets the <see cref="AVPacket"/> safe pointer.
         /// </summary>
-        public IntPtr SafePointer => m_IsDisposed.Value ? IntPtr.Zero : m_Pointer;
+        public IntPtr SafePointer
+        {
+            get { return m_IsDisposed.Value ? IntPtr.Zero : m_Pointer; }
+        }
 
         /// <summary>
         /// Gets the size in bytes.
         /// </summary>
-        public int Size => m_IsDisposed.Value ? 0 : ((AVPacket*)m_Pointer)->size;
+        public int Size
+        {
+            get { return m_IsDisposed.Value ? 0 : ((AVPacket*) m_Pointer)->size; }
+        }
 
         /// <summary>
         /// Gets the byte position of the packet -1 if unknown.
         /// </summary>
-        public long Position => m_IsDisposed.Value ? 0 : ((AVPacket*)m_Pointer)->pos;
+        public long Position
+        {
+            get { return m_IsDisposed.Value ? 0 : ((AVPacket*) m_Pointer)->pos; }
+        }
 
         /// <summary>
         /// Gets the stream index this packet belongs to.
         /// </summary>
-        public int StreamIndex => m_IsDisposed.Value ? -1 : ((AVPacket*)m_Pointer)->stream_index;
+        public int StreamIndex
+        {
+            get { return m_IsDisposed.Value ? -1 : ((AVPacket*) m_Pointer)->stream_index; }
+        }
 
         /// <summary>
         /// Gets the duration in stream timebase units.
         /// </summary>
-        public long Duration => m_IsDisposed.Value ? -1 : ((AVPacket*)m_Pointer)->duration;
+        public long Duration
+        {
+            get { return m_IsDisposed.Value ? -1 : ((AVPacket*) m_Pointer)->duration; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the specified packet is a flush packet.
         /// These flush packets are used to clear the internal decoder buffers
         /// </summary>
-        public bool IsFlushPacket => !m_IsDisposed.Value && (IntPtr)((AVPacket*)m_Pointer)->data == FlushPacketData;
+        public bool IsFlushPacket
+        {
+            get { return !m_IsDisposed.Value && (IntPtr) ((AVPacket*) m_Pointer)->data == FlushPacketData; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this instance is disposed.
         /// </summary>
-        public bool IsDisposed => m_IsDisposed.Value;
+        public bool IsDisposed
+        {
+            get { return m_IsDisposed.Value; }
+        }
 
         /// <summary>
         /// Allocates a default readable packet
@@ -76,7 +100,7 @@
         /// <returns>
         /// A packet used for receiving data
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public static MediaPacket CreateReadPacket()
         {
             var packet = new MediaPacket(ffmpeg.av_packet_alloc());
@@ -91,7 +115,7 @@
         /// <returns>
         /// The special empty packet that instructs the decoder to enter draining mode
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public static MediaPacket CreateEmptyPacket(int streamIndex)
         {
             var packet = new MediaPacket(ffmpeg.av_packet_alloc());
@@ -108,7 +132,7 @@
         /// </summary>
         /// <param name="streamIndex">The stream index this packet belongs to.</param>
         /// <returns>A special packet that makes the decoder flush its buffers</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public static MediaPacket CreateFlushPacket(int streamIndex)
         {
             var packet = new MediaPacket(ffmpeg.av_packet_alloc());
@@ -126,7 +150,7 @@
         /// </summary>
         /// <param name="source">The source.</param>
         /// <returns>The packet clone</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public static MediaPacket ClonePacket(AVPacket* source)
         {
             var packet = new MediaPacket(ffmpeg.av_packet_clone(source));

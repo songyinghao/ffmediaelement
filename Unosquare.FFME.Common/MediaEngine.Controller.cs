@@ -67,58 +67,74 @@
         /// Closes the currently loaded media.
         /// </summary>
         /// <returns>The awaitable task</returns>
-        public async Task Close() =>
+        public async Task Close()
+        {
             await Commands.CloseAsync();
+        }
 
         /// <summary>
         /// Requests new media options to be applied, including stream component selection.
         /// </summary>
         /// <returns>The awaitable command</returns>
-        public async Task ChangeMedia() =>
+        public async Task ChangeMedia()
+        {
             await Commands.ChangeMediaAsync();
+        }
 
         /// <summary>
         /// Begins or resumes playback of the currently loaded media.
         /// </summary>
         /// <returns>The awaitable command</returns>
-        public async Task Play() =>
+        public async Task Play()
+        {
             await Commands.PlayAsync();
+        }
 
         /// <summary>
         /// Pauses playback of the currently loaded media.
         /// </summary>
         /// <returns>The awaitable command</returns>
-        public async Task Pause() =>
+        public async Task Pause()
+        {
             await Commands.PauseAsync();
+        }
 
         /// <summary>
         /// Pauses and rewinds the currently loaded media.
         /// </summary>
         /// <returns>The awaitable command</returns>
-        public async Task Stop() =>
+        public async Task Stop()
+        {
             await Commands.StopAsync();
+        }
 
         /// <summary>
         /// Seeks to the specified position.
         /// </summary>
         /// <param name="position">New position for the player.</param>
         /// <returns>The awaitable command</returns>
-        public async Task Seek(TimeSpan position) =>
+        public async Task Seek(TimeSpan position)
+        {
             await Commands.SeekAsync(position);
+        }
 
         /// <summary>
         /// Seeks a single frame forward.
         /// </summary>
         /// <returns>The awaitable command</returns>
-        public async Task StepForward() =>
+        public async Task StepForward()
+        {
             await Commands.StepForwardAsync();
+        }
 
         /// <summary>
         /// Seeks a single frame backward.
         /// </summary>
         /// <returns>The awaitable command</returns>
-        public async Task StepBackward() =>
+        public async Task StepBackward()
+        {
             await Commands.StepBackwardAsync();
+        }
 
         #endregion
     }

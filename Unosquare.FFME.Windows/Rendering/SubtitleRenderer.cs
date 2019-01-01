@@ -38,12 +38,18 @@
         }
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => MediaCore;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return MediaCore; }
+        }
 
         /// <summary>
         /// Gets the parent media element (platform specific).
         /// </summary>
-        public MediaElement MediaElement => MediaCore?.Parent as MediaElement;
+        public MediaElement MediaElement
+        {
+            get { return MediaCore?.Parent as MediaElement; }
+        }
 
         /// <inheritdoc />
         public MediaEngine MediaCore { get; }
@@ -67,7 +73,10 @@
         }
 
         /// <inheritdoc />
-        public void Stop() => WaitForReadyState();
+        public void Stop()
+        {
+            WaitForReadyState();
+        }
 
         /// <inheritdoc />
         public void Seek()
@@ -84,8 +93,8 @@
                 // for subtitle rendering automatically.
                 BlockText = string.Empty;
                 SetText(string.Empty);
-                StartTime = default;
-                EndTime = default;
+                StartTime = default(TimeSpan?);
+                EndTime = default(TimeSpan?);
             }
         }
 

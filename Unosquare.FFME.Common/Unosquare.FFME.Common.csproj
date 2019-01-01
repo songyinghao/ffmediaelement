@@ -1,48 +1,170 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFrameworks>net461</TargetFrameworks>
-    <RootNamespace>Unosquare.FFME</RootNamespace>
-    <Version>4.0.280</Version>
-    <Authors>Mario Di Vece and Contributors to the FFME project</Authors>
-    <Company>Unosquare SA de CV</Company>
-    <Product>FFME Cross-Platform Media Engine</Product>
-    <Description>Contains all portable, cross platform Media Core engine components</Description>
-    <Copyright>Unosquare SA de CV, Mario Di Vece, and Contributors, (C) 2017-2018</Copyright>
-    <PackageProjectUrl>https://github.com/unosquare/ffmediaelement</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/unosquare/ffmediaelement/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageIconUrl>https://github.com/unosquare/ffmediaelement/blob/master/ffme.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/unosquare/ffmediaelement</RepositoryUrl>
-    <RepositoryType>GitHub</RepositoryType>
-    <PackageTags>FFmpeg, Media, Audio, Video, Decoding</PackageTags>
-    <AssemblyName>ffme.common</AssemblyName>
-    <Platforms>AnyCPU</Platforms>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{07BD11F4-18EA-4B26-8D61-DD50524D5344}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Unosquare.FFME.Common</RootNamespace>
+    <AssemblyName>Unosquare.FFME.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>..\StyleCop.Analyzers.ruleset</CodeAnalysisRuleSet>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>4.0.280.0</AssemblyVersion>
-    <FileVersion>4.0.280.0</FileVersion>
-    <LangVersion>latest</LangVersion>
-	<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-    <NoWarn />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>6</LangVersion>
   </PropertyGroup>
-  
   <ItemGroup>
-    <PackageReference Include="FFmpeg.AutoGen" Version="4.0.0.4" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)'=='net461'">
-    <Reference Include="System.Web" />
+  <ItemGroup>
+    <Compile Include="Aspects.cs" />
+    <Compile Include="ClosedCaptions\CaptionsChannel.cs" />
+    <Compile Include="ClosedCaptions\CaptionsColor.cs" />
+    <Compile Include="ClosedCaptions\CaptionsCommand.cs" />
+    <Compile Include="ClosedCaptions\CaptionsPacketType.cs" />
+    <Compile Include="ClosedCaptions\CaptionsStyle.cs" />
+    <Compile Include="ClosedCaptions\CaptionsXdsClass.cs" />
+    <Compile Include="ClosedCaptions\ClosedCaptionPacket.cs" />
+    <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\CommandManager.cs" />
+    <Compile Include="Commands\CommandType.cs" />
+    <Compile Include="Commands\DirectChangeCommand.cs" />
+    <Compile Include="Commands\DirectCloseCommand.cs" />
+    <Compile Include="Commands\DirectCommandBase.cs" />
+    <Compile Include="Commands\DirectOpenCommand.cs" />
+    <Compile Include="Commands\PauseCommand.cs" />
+    <Compile Include="Commands\PlayCommand.cs" />
+    <Compile Include="Commands\SeekCommand.cs" />
+    <Compile Include="Commands\StopCommand.cs" />
+    <Compile Include="Core\FFAudioParams.cs" />
+    <Compile Include="Core\FFDictionary.cs" />
+    <Compile Include="Core\FFDictionaryEntry.cs" />
+    <Compile Include="Core\FFInterop.cs" />
+    <Compile Include="Core\FFLibrary.cs" />
+    <Compile Include="Core\RC.cs" />
+    <Compile Include="Core\RealtimeClock.cs" />
+    <Compile Include="Decoding\AudioComponent.cs" />
+    <Compile Include="Decoding\AudioFrame.cs" />
+    <Compile Include="Decoding\HardwareAccelerator.cs" />
+    <Compile Include="Decoding\MediaComponent.cs" />
+    <Compile Include="Decoding\MediaComponentSet.cs" />
+    <Compile Include="Decoding\MediaContainer.cs" />
+    <Compile Include="Decoding\MediaFrame.cs" />
+    <Compile Include="Decoding\MediaPacket.cs" />
+    <Compile Include="Decoding\PacketBufferState.cs" />
+    <Compile Include="Decoding\PacketQueue.cs" />
+    <Compile Include="Decoding\PacketQueueOp.cs" />
+    <Compile Include="Decoding\SubtitleComponent.cs" />
+    <Compile Include="Decoding\SubtitleFrame.cs" />
+    <Compile Include="Decoding\VideoComponent.cs" />
+    <Compile Include="Decoding\VideoFrame.cs" />
+    <Compile Include="Logging.cs" />
+    <Compile Include="MediaEngine.Connector.cs" />
+    <Compile Include="MediaEngine.Controller.cs" />
+    <Compile Include="MediaEngine.cs" />
+    <Compile Include="MediaEngine.Static.cs" />
+    <Compile Include="MediaEngine.Workers.cs" />
+    <Compile Include="MediaEngine.Workers.Decoding.cs" />
+    <Compile Include="MediaEngine.Workers.Reading.cs" />
+    <Compile Include="MediaEngine.Workers.Rendering.cs" />
+    <Compile Include="Primitives\AtomicBoolean.cs" />
+    <Compile Include="Primitives\AtomicDateTime.cs" />
+    <Compile Include="Primitives\AtomicDouble.cs" />
+    <Compile Include="Primitives\AtomicInteger.cs" />
+    <Compile Include="Primitives\AtomicLong.cs" />
+    <Compile Include="Primitives\AtomicTimeSpan.cs" />
+    <Compile Include="Primitives\AtomicTypeBase.cs" />
+    <Compile Include="Primitives\AtomicULong.cs" />
+    <Compile Include="Primitives\BackgroundWorkerBase.cs" />
+    <Compile Include="Primitives\Benchmark.cs" />
+    <Compile Include="Primitives\CircularBuffer.cs" />
+    <Compile Include="Primitives\DelayProvider.cs" />
+    <Compile Include="Primitives\ISyncLocker.cs" />
+    <Compile Include="Primitives\IWaitEvent.cs" />
+    <Compile Include="Primitives\MediaBlockBuffer.cs" />
+    <Compile Include="Primitives\MediaTypeDictionary.cs" />
+    <Compile Include="Primitives\Promise.cs" />
+    <Compile Include="Primitives\PromiseBase.cs" />
+    <Compile Include="Primitives\SyncLockerFactory.cs" />
+    <Compile Include="Primitives\WaitEventFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shared\AudioBlock.cs" />
+    <Compile Include="Shared\Constants.cs" />
+    <Compile Include="Shared\ContainerConfiguration.cs" />
+    <Compile Include="Shared\DecoderOptions.cs" />
+    <Compile Include="Shared\DemuxerGlobalOptions.cs" />
+    <Compile Include="Shared\Extensions.cs" />
+    <Compile Include="Shared\FFmpegLoadMode.cs" />
+    <Compile Include="Shared\HardwareDeviceInfo.cs" />
+    <Compile Include="Shared\ILoggingHandler.cs" />
+    <Compile Include="Shared\ILoggingSource.cs" />
+    <Compile Include="Shared\IMediaConnector.cs" />
+    <Compile Include="Shared\IMediaEngineState.cs" />
+    <Compile Include="Shared\IMediaInputStream.cs" />
+    <Compile Include="Shared\IMediaRenderer.cs" />
+    <Compile Include="Shared\INativeMethods.cs" />
+    <Compile Include="Shared\IPlatform.cs" />
+    <Compile Include="Shared\MediaBlock.cs" />
+    <Compile Include="Shared\MediaContainerException.cs" />
+    <Compile Include="Shared\MediaEngineState.cs" />
+    <Compile Include="Shared\MediaInfo.cs" />
+    <Compile Include="Shared\MediaLogMessage.cs" />
+    <Compile Include="Shared\MediaLogMessageType.cs" />
+    <Compile Include="Shared\MediaOptions.cs" />
+    <Compile Include="Shared\MediaType.cs" />
+    <Compile Include="Shared\OptionMeta.cs" />
+    <Compile Include="Shared\PlaybackStatus.cs" />
+    <Compile Include="Shared\ReadOnlyDictionary.cs" />
+    <Compile Include="Shared\ResolutionDivider.cs" />
+    <Compile Include="Shared\SubtitleBlock.cs" />
+    <Compile Include="Shared\VideoBlock.cs" />
+    <Compile Include="Shared\VideoSeekIndex.cs" />
+    <Compile Include="Shared\VideoSeekIndexEntry.cs" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\FFmpeg.AutoGen\FFmpeg.AutoGen.csproj">
+      <Project>{1dde1093-c484-4dba-bb40-47cdefa12d7a}</Project>
+      <Name>FFmpeg.AutoGen</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Unosquare.Threading\Unosquare.Threading.csproj">
+      <Project>{ee705659-1219-4a8e-94a9-d6ca80aeff6d}</Project>
+      <Name>Unosquare.Threading</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

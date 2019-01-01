@@ -72,12 +72,18 @@
         #region Properties
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => MediaCore;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return MediaCore; }
+        }
 
         /// <summary>
         /// Gets the parent media element (platform specific).
         /// </summary>
-        public MediaElement MediaElement => MediaCore?.Parent as MediaElement;
+        public MediaElement MediaElement
+        {
+            get { return MediaCore?.Parent as MediaElement; }
+        }
 
         /// <inheritdoc />
         public MediaEngine MediaCore { get; }
@@ -171,7 +177,7 @@
 
             var canStartForegroundTask = MediaElement.VideoView.ElementDispatcher != MediaElement.Dispatcher;
             var foregroundTask = canStartForegroundTask ?
-                MediaElement.Dispatcher.InvokeAsync(foregroundAction) : null;
+                MediaElement.Dispatcher.BeginInvoke(foregroundAction) : null;
 
             // Ensure the target bitmap can be loaded
             MediaElement?.VideoView?.InvokeAsync(DispatcherPriority.Render, () =>
@@ -239,7 +245,7 @@
                 MediaElement.CaptionsView.Reset();
 
                 // Force refresh
-                MediaElement.VideoView?.Dispatcher?.Invoke(() => { }, DispatcherPriority.Render);
+                MediaElement.VideoView?.Dispatcher?.Invoke(DispatcherPriority.Render,new Action(() => { }));
             });
         }
 
@@ -313,7 +319,8 @@
         /// <param name="source">The source.</param>
         private void LoadTargetBitmapBuffer(BitmapDataBuffer target, VideoBlock source)
         {
-            if (source == null || !source.TryAcquireReaderLock(out var readLock))
+            IDisposable readLock;
+            if (source == null || !source.TryAcquireReaderLock(out readLock))
                 return;
 
             using (readLock)
@@ -331,7 +338,7 @@
         /// Applies the scale transform according to the block's aspect ratio.
         /// </summary>
         /// <param name="b">The b.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void ApplyLayoutTransforms(VideoBlock b)
         {
             if (MediaElement?.VideoView == null) return;
@@ -339,7 +346,8 @@
             ScaleTransform scaleTransform;
             RotateTransform rotateTransform;
 
-            if (MediaElement.VideoView.LayoutTransform is TransformGroup layoutTransforms)
+            var layoutTransforms = MediaElement.VideoView.LayoutTransform as TransformGroup;
+            if (layoutTransforms != null)
             {
                 scaleTransform = layoutTransforms.Children[0] as ScaleTransform;
                 rotateTransform = layoutTransforms.Children[1] as RotateTransform;

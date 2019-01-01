@@ -48,7 +48,10 @@
         /// <summary>
         /// Whether the header's in queue flag is set
         /// </summary>
-        public bool IsQueued => header.Flags.HasFlag(WaveHeaderFlags.InQueue);
+        public bool IsQueued
+        {
+            get { return header.Flags.HasFlag(WaveHeaderFlags.InQueue); }
+        }
 
         /// <summary>
         /// The buffer size in bytes
@@ -73,8 +76,8 @@
                 BufferHandle.Free();
 
             // Reset the struct fields
-            HeaderHandle = default;
-            BufferHandle = default;
+            HeaderHandle = default(GCHandle);
+            BufferHandle = default(GCHandle);
             DeviceHandle = IntPtr.Zero;
         }
 

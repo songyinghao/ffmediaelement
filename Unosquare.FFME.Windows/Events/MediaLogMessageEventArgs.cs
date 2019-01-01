@@ -43,9 +43,11 @@
         public string AspectName { get; }
 
         /// <inheritdoc />
-        public override string ToString() =>
-            $"[{TimestampUtc.Minute:00}:{TimestampUtc.Second:00}.{TimestampUtc.Millisecond:000} " +
-            $"| {GetTypePrefix()} | {AspectName,-20}] {Message}";
+        public override string ToString()
+        {
+            return $"[{TimestampUtc.Minute:00}:{TimestampUtc.Second:00}.{TimestampUtc.Millisecond:000} " +
+                   $"| {GetTypePrefix()} | {AspectName,-20}] {Message}";
+        }
 
         /// <summary>
         /// Gets the type prefix.

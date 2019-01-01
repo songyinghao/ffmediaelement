@@ -50,7 +50,7 @@
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="ExceptionRoutedEventArgs"/> instance containing the event data.</param>
-        private void OnMediaFailed(object sender, ExceptionRoutedEventArgs e)
+        private void OnMediaFailed(object sender, Events.ExceptionRoutedEventArgs e)
         {
             MessageBox.Show(
                 App.Current.MainWindow,
@@ -156,7 +156,8 @@
 
             // Setting Advanced Video Stream Options is also possible
             // ReSharper disable once InvertIf
-            if (e.Options.VideoStream is StreamInfo videoStream)
+            var videoStream = e.Options.VideoStream;
+            if (videoStream != null)
             {
                 // If we have a valid seek index let's use it!
                 if (string.IsNullOrWhiteSpace(mediaFilePath) == false)

@@ -24,8 +24,8 @@
         /// </summary>
         public string Thumbnail
         {
-            get => GetMappedAttributeValue();
-            set => SetMappedAttributeValue(value);
+            get { return GetMappedAttributeValue(); }
+            set { SetMappedAttributeValue(value); }
         }
 
         /// <summary>
@@ -33,8 +33,8 @@
         /// </summary>
         public string Format
         {
-            get => GetMappedAttributeValue();
-            set => SetMappedAttributeValue(value);
+            get { return GetMappedAttributeValue(); }
+            set { SetMappedAttributeValue(value); }
         }
 
         /// <summary>
@@ -46,9 +46,10 @@
             {
                 var currentValue = GetMappedAttributeValue();
                 if (string.IsNullOrWhiteSpace(currentValue))
-                    return default;
+                    return default(DateTime?);
 
-                return long.TryParse(currentValue, out var binaryValue) ?
+                long binaryValue;
+                return long.TryParse(currentValue, out binaryValue) ?
                     DateTime.FromBinary(binaryValue) :
                     default(DateTime?);
             }
@@ -65,12 +66,25 @@
             }
         }
 
-        private string GetMappedAttributeValue([CallerMemberName] string propertyName = null) =>
-            Attributes.GetEntryValue(PropertyMap[propertyName ?? throw new ArgumentNullException(nameof(propertyName))]);
+        private string GetMappedAttributeValue([CallerMemberName] string propertyName = null)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
+
+            return Attributes.GetEntryValue(
+                PropertyMap[propertyName]);
+        }
 
         private void SetMappedAttributeValue(string value, [CallerMemberName] string propertyName = null)
         {
-            if (Attributes.SetEntryValue(PropertyMap[propertyName ?? throw new ArgumentNullException(nameof(propertyName))], value))
+            if (string.IsNullOrEmpty(propertyName))
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
+
+            if (Attributes.SetEntryValue(PropertyMap[propertyName], value))
                 OnPropertyChanged(propertyName);
         }
     }

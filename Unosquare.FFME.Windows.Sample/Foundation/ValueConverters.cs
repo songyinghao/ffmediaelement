@@ -15,15 +15,18 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch (value)
+            if (value is TimeSpan)
             {
-                case TimeSpan span:
-                    return span.TotalSeconds;
-                case Duration duration:
-                    return duration.HasTimeSpan ? duration.TimeSpan.TotalSeconds : 0d;
-                default:
-                    return 0d;
+                return ((TimeSpan)value).TotalSeconds;
             }
+
+            if (value is Duration)
+            {
+                Duration duration = (Duration) value;
+                return duration.HasTimeSpan ? duration.TimeSpan.TotalSeconds : 0d;
+            }
+
+            return 0d;
         }
 
         /// <inheritdoc />
@@ -47,24 +50,35 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         {
             TimeSpan? p;
 
-            switch (value)
+            if (value is TimeSpan)
             {
-                case TimeSpan position:
-                    p = position;
-                    break;
-                case Duration duration when duration.HasTimeSpan:
+                p = (TimeSpan)value;
+            }
+            else if(value is Duration)
+            {
+                Duration duration = (Duration) value;
+                if (duration.HasTimeSpan)
+                {
                     p = duration.TimeSpan;
-                    break;
-                default:
+                }
+                else
+                {
                     return string.Empty;
+                }
+            }
+            else
+            {
+                return string.Empty;
             }
 
             return $"{(int)p.Value.TotalHours:00}:{p.Value.Minutes:00}:{p.Value.Seconds:00}.{p.Value.Milliseconds:000}";
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
+        }
     }
 
     /// <inheritdoc />
@@ -107,8 +121,10 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
+        }
     }
 
     /// <inheritdoc />
@@ -151,8 +167,10 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
+        }
     }
 
     /// <inheritdoc />
@@ -162,7 +180,13 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         public object Convert(object value, Type targetType, object format, CultureInfo culture)
         {
             var percentage = 0d;
-            if (value is double d) percentage = d;
+
+            if (!(value is double))
+            {
+                return string.Empty;
+            }
+
+            percentage = (double)value;
 
             percentage = Math.Round(percentage * 100d, 0);
 
@@ -173,8 +197,10 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
+        }
     }
 
     /// <inheritdoc />
@@ -183,7 +209,8 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object format, CultureInfo culture)
         {
-            if (value is string thumbnailFilename && GuiContext.Current.IsInDesignTime == false)
+            string thumbnailFilename = value != null ? value.ToString() : null;
+            if (!string.IsNullOrEmpty(thumbnailFilename) && GuiContext.Current.IsInDesignTime == false)
             {
                 return ThumbnailGenerator.GetThumbnail(
                     App.Current.ViewModel.Playlist.ThumbsDirectory, thumbnailFilename);
@@ -193,8 +220,10 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
+        }
     }
 
     /// <inheritdoc />
@@ -203,7 +232,7 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var duration = value is TimeSpan span ? span : TimeSpan.FromSeconds(-1);
+            var duration = value is TimeSpan ? (TimeSpan)value : TimeSpan.FromSeconds(-1);
 
             if (duration.TotalSeconds <= 0)
                 return "∞";
@@ -214,8 +243,10 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotSupportedException();
+        }
     }
 
     /// <inheritdoc />
@@ -230,8 +261,10 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotSupportedException();
+        }
     }
 
     /// <inheritdoc />
@@ -248,8 +281,10 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotSupportedException();
+        }
     }
 
     /// <inheritdoc />
@@ -257,12 +292,16 @@ namespace Unosquare.FFME.Windows.Sample.Foundation
     internal class ClosedCaptionsChannelConverter : IValueConverter
     {
         /// <inheritdoc />
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            value != null && (CaptionsChannel)value != CaptionsChannel.CCP;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value != null && (CaptionsChannel) value != CaptionsChannel.CCP;
+        }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
-            value != null && (bool)value ? CaptionsChannel.CC1 : CaptionsChannel.CCP;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value != null && (bool) value ? CaptionsChannel.CC1 : CaptionsChannel.CCP;
+        }
     }
 }
 #pragma warning restore SA1649 // File name must match first type name

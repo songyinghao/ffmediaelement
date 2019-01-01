@@ -9,6 +9,7 @@
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
+    using Unosquare.FFME.Common.NET4.Shared;
 
     /// <summary>
     /// Provides a set of utilities to perform logging, text formatting,
@@ -298,15 +299,19 @@
         /// Retrieves the global format options.
         /// </summary>
         /// <returns>The collection of option infos</returns>
-        public static unsafe List<OptionMeta> RetrieveGlobalFormatOptions() =>
-            RetrieveOptions(ffmpeg.avformat_get_class());
+        public static unsafe List<OptionMeta> RetrieveGlobalFormatOptions()
+        {
+            return RetrieveOptions(ffmpeg.avformat_get_class());
+        }
 
         /// <summary>
         /// Retrieves the global codec options.
         /// </summary>
         /// <returns>The collection of option infos</returns>
-        public static unsafe List<OptionMeta> RetrieveGlobalCodecOptions() =>
-            RetrieveOptions(ffmpeg.avcodec_get_class());
+        public static unsafe List<OptionMeta> RetrieveGlobalCodecOptions()
+        {
+            return RetrieveOptions(ffmpeg.avcodec_get_class());
+        }
 
         /// <summary>
         /// Retrieves the input format options.
@@ -324,8 +329,10 @@
         /// </summary>
         /// <param name="codec">The codec.</param>
         /// <returns>The collection of option infos</returns>
-        public static unsafe List<OptionMeta> RetrieveCodecOptions(AVCodec* codec) =>
-            RetrieveOptions(codec->priv_class);
+        public static unsafe List<OptionMeta> RetrieveCodecOptions(AVCodec* codec)
+        {
+            return RetrieveOptions(codec->priv_class);
+        }
 
         /// <summary>
         /// Log message callback from ffmpeg library.
@@ -369,8 +376,10 @@
         internal class FFLoggingHandler : ILoggingHandler
         {
             /// <inheritdoc />
-            void ILoggingHandler.HandleLogMessage(MediaLogMessage message) =>
+            void ILoggingHandler.HandleLogMessage(MediaLogMessage message)
+            {
                 MediaEngine.Platform?.HandleFFmpegLogMessage(message);
+            }
         }
 
         #endregion

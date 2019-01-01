@@ -476,8 +476,8 @@
         /// </summary>
         public byte D0
         {
-            get => Data[1];
-            private set => Data[1] = value;
+            get { return Data[1]; }
+            private set { Data[1] = value; }
         }
 
         /// <summary>
@@ -485,8 +485,8 @@
         /// </summary>
         public byte D1
         {
-            get => Data[2];
-            private set => Data[2] = value;
+            get { return Data[2]; }
+            private set { Data[2] = value; }
         }
 
         /// <summary>
@@ -687,7 +687,10 @@
         /// <returns>
         ///   <c>true</c> if [is header valid flag set] [the specified data]; otherwise, <c>false</c>.
         /// </returns>
-        private static bool IsHeaderValidFlagSet(byte data) => (data & 0x04) == 0x04;
+        private static bool IsHeaderValidFlagSet(byte data)
+        {
+            return (data & 0x04) == 0x04;
+        }
 
         /// <summary>
         /// Gets the NTSC field type (1 or 2).

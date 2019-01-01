@@ -53,7 +53,8 @@
             var headerFields = entryAttributesText.Split(',');
 
             // The first field is the duration
-            if (headerFields.Length >= 1 && long.TryParse(headerFields[0].Trim(), out var duration))
+            long duration;
+            if (headerFields.Length >= 1 && long.TryParse(headerFields[0].Trim(), out duration))
                 entry.Duration = TimeSpan.FromSeconds(Convert.ToDouble(duration));
 
             // The next field is the title

@@ -68,8 +68,15 @@
         /// Gets a safe timestamp the the block can be displayed.
         /// Returns StartTime if the duration is Zero or negative.
         /// </summary>
-        public TimeSpan SnapTime => Duration.Ticks <= 0 ?
-            StartTime : TimeSpan.FromTicks(StartTime.Ticks + TimeSpan.TicksPerMillisecond);
+        public TimeSpan SnapTime
+        {
+            get
+            {
+                return Duration.Ticks <= 0
+                    ? StartTime
+                    : TimeSpan.FromTicks(StartTime.Ticks + TimeSpan.TicksPerMillisecond);
+            }
+        }
 
         /// <summary>
         /// Gets a pointer to the first byte of the unmanaged data buffer.
@@ -98,8 +105,8 @@
         /// </summary>
         public bool IsDisposed
         {
-            get => m_IsDisposed.Value;
-            private set => m_IsDisposed.Value = value;
+            get { return m_IsDisposed.Value; }
+            private set { m_IsDisposed.Value = value; }
         }
 
         /// <summary>
@@ -174,7 +181,10 @@
         }
 
         /// <inheritdoc />
-        public void Dispose() => Dispose(true);
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         /// <summary>
         /// Allocates the specified buffer length.
@@ -186,6 +196,7 @@
             if (bufferLength <= 0)
                 throw new ArgumentException($"{nameof(bufferLength)} must be greater than 0");
 
+
             lock (SyncLock)
             {
                 if (IsDisposed)
@@ -193,8 +204,8 @@
 
                 if (m_BufferLength == bufferLength)
                     return true;
-
-                if (!Locker.TryAcquireWriterLock(out var writeLock))
+                IDisposable writeLock;
+                if (!Locker.TryAcquireWriterLock(out writeLock))
                     return false;
 
                 using (writeLock)
@@ -237,7 +248,7 @@
 
             ffmpeg.av_free((void*)m_Buffer);
             m_Buffer = IntPtr.Zero;
-            m_BufferLength = default;
+            m_BufferLength = default(int);
         }
     }
 }

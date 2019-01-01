@@ -82,34 +82,52 @@ namespace Unosquare.FFME.Rendering.Wave
         /// <summary>
         /// Returns the number of channels (1=mono,2=stereo etc)
         /// </summary>
-        public int Channels => channels;
+        public int Channels
+        {
+            get { return channels; }
+        }
 
         /// <summary>
         /// Returns the sample rate (samples per second)
         /// </summary>
-        public int SampleRate => sampleRate;
+        public int SampleRate
+        {
+            get { return sampleRate; }
+        }
 
         /// <summary>
         /// Returns the average number of bytes used per second
         /// </summary>
-        public int AverageBytesPerSecond => averageBytesPerSecond;
+        public int AverageBytesPerSecond
+        {
+            get { return averageBytesPerSecond; }
+        }
 
         /// <summary>
         /// Returns the block alignment
         /// </summary>
-        public virtual int BlockAlign => blockAlign;
+        public virtual int BlockAlign
+        {
+            get { return blockAlign; }
+        }
 
         /// <summary>
         /// Returns the number of bits per sample (usually 16 or 32, sometimes 24 or 8)
         /// Can be 0 for some codecs
         /// </summary>
-        public int BitsPerSample => bitsPerSample;
+        public int BitsPerSample
+        {
+            get { return bitsPerSample; }
+        }
 
         /// <summary>
         /// Returns the number of extra bytes used by this wave format. Often 0,
         /// except for compressed formats which store extra data after the WAVEFORMATEX header
         /// </summary>
-        public int ExtraSize => extraSize;
+        public int ExtraSize
+        {
+            get { return extraSize; }
+        }
 
         #endregion
 
@@ -135,8 +153,11 @@ namespace Unosquare.FFME.Rendering.Wave
         /// </summary>
         /// <param name="byteSize">Size of the byte.</param>
         /// <returns>The duration given the byte size</returns>
-        public TimeSpan ConvertByteSizeToDuration(int byteSize) =>
-            TimeSpan.FromTicks(Convert.ToInt64(TimeSpan.TicksPerSecond * (double)byteSize / averageBytesPerSecond));
+        public TimeSpan ConvertByteSizeToDuration(int byteSize)
+        {
+            return TimeSpan.FromTicks(
+                Convert.ToInt64(TimeSpan.TicksPerSecond * (double) byteSize / averageBytesPerSecond));
+        }
 
         /// <summary>
         /// Reports this WaveFormat as a string
@@ -154,7 +175,8 @@ namespace Unosquare.FFME.Rendering.Wave
         /// <returns>True if the objects are the same</returns>
         public override bool Equals(object obj)
         {
-            if (obj is WaveFormat other)
+            var other = obj as WaveFormat;
+            if (other != null)
             {
                 return
                     channels == other.channels &&
@@ -182,7 +204,10 @@ namespace Unosquare.FFME.Rendering.Wave
         }
 
         /// <inheritdoc />
-        public bool Equals(WaveFormat other) => other != null && GetHashCode() == other.GetHashCode();
+        public bool Equals(WaveFormat other)
+        {
+            return other != null && GetHashCode() == other.GetHashCode();
+        }
     }
 }
 #pragma warning restore 414 // Field is assigned but its value is never used

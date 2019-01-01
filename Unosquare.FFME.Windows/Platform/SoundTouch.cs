@@ -180,7 +180,10 @@
         /// <summary>
         /// Get SoundTouch version string
         /// </summary>
-        public static string Version => Marshal.PtrToStringAnsi(NativeMethods.GetVersionString());
+        public static string Version
+        {
+            get { return Marshal.PtrToStringAnsi(NativeMethods.GetVersionString()); }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the SoundTouch Library (dll) is available

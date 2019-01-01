@@ -27,9 +27,15 @@
         }
 
         /// <inheritdoc />
-        protected override long FromLong(long backingValue) => backingValue;
+        protected override long FromLong(long backingValue)
+        {
+            return backingValue;
+        }
 
         /// <inheritdoc />
-        protected override long ToLong(long value) => value;
+        protected override long ToLong(long value)
+        {
+            return value;
+        }
     }
 }

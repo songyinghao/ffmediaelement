@@ -69,7 +69,7 @@
         /// <summary>
         /// Outputs Reference Counter Results
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void LogReferenceCounter()
         {
             if (MediaEngine.Platform?.IsInDebugMode ?? true) return;

@@ -27,9 +27,15 @@
         }
 
         /// <inheritdoc />
-        protected override int FromLong(long backingValue) => Convert.ToInt32(backingValue);
+        protected override int FromLong(long backingValue)
+        {
+            return Convert.ToInt32(backingValue);
+        }
 
         /// <inheritdoc />
-        protected override long ToLong(int value) => Convert.ToInt64(value);
+        protected override long ToLong(int value)
+        {
+            return Convert.ToInt64(value);
+        }
     }
 }

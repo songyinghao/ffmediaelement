@@ -30,8 +30,8 @@
         /// </summary>
         public ImageSource Source
         {
-            get => GetElementProperty<ImageSource>(Image.SourceProperty);
-            set => SetElementProperty(Image.SourceProperty, value);
+            get { return GetElementProperty<ImageSource>(Image.SourceProperty); }
+            set { SetElementProperty(Image.SourceProperty, value); }
         }
 
         /// <summary>
@@ -39,8 +39,8 @@
         /// </summary>
         public Stretch Stretch
         {
-            get => GetElementProperty<Stretch>(Image.StretchProperty);
-            set => SetElementProperty(Image.StretchProperty, value);
+            get { return GetElementProperty<Stretch>(Image.StretchProperty); }
+            set { SetElementProperty(Image.StretchProperty, value); }
         }
 
         /// <summary>
@@ -48,8 +48,8 @@
         /// </summary>
         public StretchDirection StretchDirection
         {
-            get => GetElementProperty<StretchDirection>(Image.StretchDirectionProperty);
-            set => SetElementProperty(Image.StretchDirectionProperty, value);
+            get { return GetElementProperty<StretchDirection>(Image.StretchDirectionProperty); }
+            set { SetElementProperty(Image.StretchDirectionProperty, value); }
         }
 
         /// <inheritdoc />

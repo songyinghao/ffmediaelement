@@ -136,8 +136,10 @@
         public void Add(AVPacket* pointer,
             [CallerMemberName] string memberName = null,
             [CallerFilePath] string filePath = null,
-            [CallerLineNumber] int lineNumber = 0) =>
-            AddInternal(UnmanagedType.Packet, (IntPtr)pointer, memberName, filePath, lineNumber);
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            AddInternal(UnmanagedType.Packet, (IntPtr) pointer, memberName, filePath, lineNumber);
+        }
 
         /// <summary>
         /// Adds the specified pointer.
@@ -149,8 +151,10 @@
         public void Add(SwrContext* pointer,
             [CallerMemberName] string memberName = null,
             [CallerFilePath] string filePath = null,
-            [CallerLineNumber] int lineNumber = 0) =>
-            AddInternal(UnmanagedType.SwrContext, (IntPtr)pointer, memberName, filePath, lineNumber);
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            AddInternal(UnmanagedType.SwrContext, (IntPtr) pointer, memberName, filePath, lineNumber);
+        }
 
         /// <summary>
         /// Adds the specified pointer.
@@ -162,8 +166,10 @@
         public void Add(SwsContext* pointer,
             [CallerMemberName] string memberName = null,
             [CallerFilePath] string filePath = null,
-            [CallerLineNumber] int lineNumber = 0) =>
-            AddInternal(UnmanagedType.SwsContext, (IntPtr)pointer, memberName, filePath, lineNumber);
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            AddInternal(UnmanagedType.SwsContext, (IntPtr) pointer, memberName, filePath, lineNumber);
+        }
 
         /// <summary>
         /// Adds the specified pointer.
@@ -175,8 +181,10 @@
         public void Add(AVCodecContext* pointer,
             [CallerMemberName] string memberName = null,
             [CallerFilePath] string filePath = null,
-            [CallerLineNumber] int lineNumber = 0) =>
-            AddInternal(UnmanagedType.CodecContext, (IntPtr)pointer, memberName, filePath, lineNumber);
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            AddInternal(UnmanagedType.CodecContext, (IntPtr) pointer, memberName, filePath, lineNumber);
+        }
 
         /// <summary>
         /// Adds the specified pointer.
@@ -188,8 +196,10 @@
         public void Add(AVFrame* pointer,
             [CallerMemberName] string memberName = null,
             [CallerFilePath] string filePath = null,
-            [CallerLineNumber] int lineNumber = 0) =>
-            AddInternal(UnmanagedType.Frame, (IntPtr)pointer, memberName, filePath, lineNumber);
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            AddInternal(UnmanagedType.Frame, (IntPtr) pointer, memberName, filePath, lineNumber);
+        }
 
         /// <summary>
         /// Adds the specified pointer.
@@ -201,8 +211,10 @@
         public void Add(AVFilterGraph* pointer,
             [CallerMemberName] string memberName = null,
             [CallerFilePath] string filePath = null,
-            [CallerLineNumber] int lineNumber = 0) =>
-            AddInternal(UnmanagedType.FilterGraph, (IntPtr)pointer, memberName, filePath, lineNumber);
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            AddInternal(UnmanagedType.FilterGraph, (IntPtr) pointer, memberName, filePath, lineNumber);
+        }
 
         /// <summary>
         /// Adds the specified unmanaged object reference.
@@ -275,8 +287,10 @@
             public int LineNumber { get; }
 
             /// <inheritdoc />
-            public override string ToString() =>
-                $"{Type} - {FileName}; Line: {LineNumber}, Member: {MemberName}";
+            public override string ToString()
+            {
+                return $"{Type} - {FileName}; Line: {LineNumber}, Member: {MemberName}";
+            }
         }
     }
 }

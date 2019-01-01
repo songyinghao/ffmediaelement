@@ -77,7 +77,7 @@
         /// <summary>
         /// Updates the notification properties.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void UpdateNotificationProperties()
         {
             // Detect changes
@@ -103,7 +103,7 @@
         /// <summary>
         /// Updates the dependency properties.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void UpdateDependencyProperties()
         {
             // Detect Notification and Dependency property changes

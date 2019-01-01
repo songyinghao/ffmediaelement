@@ -48,7 +48,7 @@
         /// <param name="videoBlock">The block.</param>
         /// <param name="bitmap">The bitmap.</param>
         /// <param name="clock">The clock.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void RaiseRenderingVideoEvent(VideoBlock videoBlock, BitmapDataBuffer bitmap, TimeSpan clock)
         {
             if (RenderingVideo == null) return;
@@ -74,7 +74,7 @@
         /// <param name="bufferLength">Length of the buffer.</param>
         /// <param name="startTime">The start time.</param>
         /// <param name="duration">The duration.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void RaiseRenderingAudioEvent(
             byte[] buffer, int bufferLength, TimeSpan startTime, TimeSpan duration)
         {
@@ -101,7 +101,7 @@
         /// <param name="block">The block.</param>
         /// <param name="clock">The clock.</param>
         /// <returns>True if the rendering should be prevented</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal bool RaiseRenderingSubtitlesEvent(SubtitleBlock block, TimeSpan clock)
         {
             if (RenderingSubtitles == null) return false;
@@ -123,8 +123,10 @@
         /// <summary>
         /// Raises the audio device stopped event.
         /// </summary>
-        internal void RaiseAudioDeviceStoppedEvent() =>
+        internal void RaiseAudioDeviceStoppedEvent()
+        {
             AudioDeviceStopped?.Invoke(this, EventArgs.Empty);
+        }
 
         #endregion
     }

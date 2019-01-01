@@ -35,22 +35,34 @@
         /// Gets the current application.
         /// </summary>
         [SuppressMessage("ReSharper", "ArrangeModifiersOrder", Justification = "StyleCop rule mandates specified order of modifiers")]
-        public static new App Current => Application.Current as App;
+        public static new App Current
+        {
+            get { return Application.Current as App; }
+        }
 
         /// <summary>
         /// Gets the main window of the application.
         /// </summary>
-        public new MainWindow MainWindow => Application.Current.MainWindow as MainWindow;
+        public new MainWindow MainWindow
+        {
+            get { return Application.Current.MainWindow as MainWindow; }
+        }
 
         /// <summary>
         /// Gets the media element hosted by the main window.
         /// </summary>
-        public MediaElement MediaElement => MainWindow?.Media;
+        public MediaElement MediaElement
+        {
+            get { return MainWindow?.Media; }
+        }
 
         /// <summary>
         /// Provides access to the root-level, application-wide VM
         /// </summary>
-        public RootViewModel ViewModel => Application.Current.Resources[nameof(ViewModel)] as RootViewModel;
+        public RootViewModel ViewModel
+        {
+            get { return Application.Current.Resources[nameof(ViewModel)] as RootViewModel; }
+        }
 
         /// <summary>
         /// Provides access to application-wide commands

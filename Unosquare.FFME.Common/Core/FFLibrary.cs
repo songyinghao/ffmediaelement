@@ -129,7 +129,10 @@
         /// <summary>
         /// Gets a value indicating whether the library has already been loaded.
         /// </summary>
-        public bool IsLoaded => Reference != IntPtr.Zero;
+        public bool IsLoaded
+        {
+            get { return Reference != IntPtr.Zero; }
+        }
 
         /// <summary>
         /// Gets the load error code. 0 for success.

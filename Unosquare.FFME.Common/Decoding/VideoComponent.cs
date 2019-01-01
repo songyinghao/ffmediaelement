@@ -237,8 +237,9 @@
             }
 
             // Perform scaling and save the data to our unmanaged buffer pointer
+            IDisposable writeLock;
             if (target.Allocate(source, Constants.Video.VideoPixelFormat)
-                && target.TryAcquireWriterLock(out var writeLock))
+                && target.TryAcquireWriterLock(out writeLock))
             {
                 using (writeLock)
                 {
@@ -334,7 +335,8 @@
             // Move the frame from hardware (GPU) memory to RAM (CPU)
             if (HardwareAccelerator != null)
             {
-                frame = HardwareAccelerator.ExchangeFrame(CodecContext, frame, out var isHardwareFrame);
+                bool isHardwareFrame;
+                frame = HardwareAccelerator.ExchangeFrame(CodecContext, frame, out isHardwareFrame);
                 IsUsingHardwareDecoding = isHardwareFrame;
             }
 

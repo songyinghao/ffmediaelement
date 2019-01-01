@@ -118,7 +118,10 @@
         /// When the unmanaged frame is released (freed from unmanaged memory)
         /// this property will return true.
         /// </summary>
-        public bool IsStale => InternalPointer == IntPtr.Zero;
+        public bool IsStale
+        {
+            get { return InternalPointer == IntPtr.Zero; }
+        }
 
         /// <summary>
         /// Gets the time base of the stream that generated this frame.
@@ -148,7 +151,7 @@
         /// Creates a frame used for Audio or Video
         /// </summary>
         /// <returns>The frame allocated in unmanaged memory</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal static AVFrame* CreateAVFrame()
         {
             var frame = ffmpeg.av_frame_alloc();
@@ -160,7 +163,7 @@
         /// Releases a previously allocated frame used for Audio or Video
         /// </summary>
         /// <param name="frame">The frame.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal static void ReleaseAVFrame(AVFrame* frame)
         {
             RC.Current.Remove(frame);
@@ -172,7 +175,7 @@
         /// </summary>
         /// <param name="source">The source frame.</param>
         /// <returns>The cloned frame</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal static AVFrame* CloneAVFrame(AVFrame* source)
         {
             var frame = ffmpeg.av_frame_clone(source);
@@ -184,7 +187,7 @@
         /// Allocates an AVSubtitle struct in unmanaged memory,
         /// </summary>
         /// <returns>The subtitle struct pointer</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal static AVSubtitle* CreateAVSubtitle()
         {
             return (AVSubtitle*)ffmpeg.av_malloc((ulong)Marshal.SizeOf(typeof(AVSubtitle)));
@@ -194,7 +197,7 @@
         /// De-allocates the subtitle struct used to create in managed memory.
         /// </summary>
         /// <param name="frame">The frame.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal static void ReleaseAVSubtitle(AVSubtitle* frame)
         {
             if (frame == null) return;

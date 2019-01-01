@@ -1,5 +1,6 @@
 ﻿namespace Unosquare.FFME.Primitives
 {
+    using Unosquare.Threading;
     using System;
     using System.Diagnostics;
     using System.Threading;
@@ -131,7 +132,7 @@
         /// </summary>
         private void DelayTask()
         {
-            Task.Delay(1).ConfigureAwait(continueOnCapturedContext: false)
+            TaskEx.Delay(1).ConfigureAwait(continueOnCapturedContext: false)
                 .GetAwaiter().GetResult();
         }
 

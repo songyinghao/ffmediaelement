@@ -55,7 +55,7 @@
         /// </summary>
         public string Name
         {
-            get => m_Name;
+            get { return m_Name; }
             set
             {
                 m_Name = value;
@@ -298,7 +298,10 @@
         /// <param name="title">The title.</param>
         /// <param name="duration">The duration.</param>
         /// <param name="url">The URL.</param>
-        public void Add(string title, TimeSpan duration, string url) => Add(title, duration, url, null);
+        public void Add(string title, TimeSpan duration, string url)
+        {
+            Add(title, duration, url, null);
+        }
 
         #endregion
     }

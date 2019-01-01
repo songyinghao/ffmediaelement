@@ -40,7 +40,7 @@
         {
             var sourcePath = Path.Combine(targetPath, thumbnailFilename);
             if (string.IsNullOrWhiteSpace(thumbnailFilename) || File.Exists(sourcePath) == false)
-                return default;
+                return default(ImageSource);
 
             try
             {

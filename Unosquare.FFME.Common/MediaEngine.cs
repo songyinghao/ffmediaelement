@@ -51,7 +51,10 @@
         #region Properties
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => this;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return this; }
+        }
 
         /// <summary>
         /// Contains the Media Status
@@ -63,18 +66,27 @@
         /// This is different from the position property and it is useful
         /// in computing things like real-time latency in a render cycle.
         /// </summary>
-        public TimeSpan WallClock => State.IsOpen || State.IsOpening ? Clock.Position : TimeSpan.Zero;
+        public TimeSpan WallClock
+        {
+            get { return State.IsOpen || State.IsOpening ? Clock.Position : TimeSpan.Zero; }
+        }
 
         /// <summary>
         /// Provides stream, chapter and program info of the underlying media.
         /// Returns null when no media is loaded.
         /// </summary>
-        public MediaInfo MediaInfo => Container?.MediaInfo;
+        public MediaInfo MediaInfo
+        {
+            get { return Container?.MediaInfo; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this instance is disposed.
         /// </summary>
-        public bool IsDisposed => m_IsDisposed.Value;
+        public bool IsDisposed
+        {
+            get { return m_IsDisposed.Value; }
+        }
 
         /// <summary>
         /// Gets the associated parent object.
@@ -97,8 +109,10 @@
         #region Methods
 
         /// <inheritdoc />
-        void ILoggingHandler.HandleLogMessage(MediaLogMessage message) =>
+        void ILoggingHandler.HandleLogMessage(MediaLogMessage message)
+        {
             SendOnMessageLogged(message);
+        }
 
         /// <inheritdoc />
         public void Dispose()

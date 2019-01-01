@@ -18,9 +18,15 @@
         }
 
         /// <inheritdoc />
-        protected override DateTime FromLong(long backingValue) => new DateTime(backingValue);
+        protected override DateTime FromLong(long backingValue)
+        {
+            return new DateTime(backingValue);
+        }
 
         /// <inheritdoc />
-        protected override long ToLong(DateTime value) => value.Ticks;
+        protected override long ToLong(DateTime value)
+        {
+            return value.Ticks;
+        }
     }
 }

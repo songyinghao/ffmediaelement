@@ -474,7 +474,7 @@
 
                 var block = this[position];
                 if (block == null)
-                    return default;
+                    return default(TimeSpan?);
 
                 if (block.EndTime > position)
                     return block.StartTime;
@@ -490,7 +490,7 @@
         /// <param name="mediaType">Type of the media.</param>
         /// <exception cref="InvalidCastException">MediaBlock does not have a valid type</exception>
         /// <returns>An instance of the block of the specified type</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private static MediaBlock CreateBlock(MediaType mediaType)
         {
             if (mediaType == MediaType.Video) return new VideoBlock();
@@ -505,7 +505,7 @@
         /// This method must be called whenever the collection is modified.
         /// The reason this exists is to avoid computing and iterating over these values every time they are read
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void UpdateCollectionProperties()
         {
             LastLookupIndex = -1;
@@ -523,7 +523,7 @@
             // don't compute an average if we don't have blocks
             if (m_Count <= 0)
             {
-                m_AverageBlockDuration = default;
+                m_AverageBlockDuration = default(TimeSpan);
                 return;
             }
 
@@ -540,7 +540,7 @@
             var lastBlockDuration = PlaybackBlocks[m_Count - 1].Duration;
             IsNonMonotonic = PlaybackBlocks.Any(b => b.Duration.Ticks != lastBlockDuration.Ticks);
             m_IsMonotonic = !IsNonMonotonic;
-            m_MonotonicDuration = m_IsMonotonic ? lastBlockDuration : default;
+            m_MonotonicDuration = m_IsMonotonic ? lastBlockDuration : default(TimeSpan);
             m_AverageBlockDuration = m_IsMonotonic ? lastBlockDuration : TimeSpan.FromTicks(
                 Convert.ToInt64(PlaybackBlocks.Average(b => Convert.ToDouble(b.Duration.Ticks))));
         }

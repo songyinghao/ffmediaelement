@@ -54,7 +54,10 @@
         /// <summary>
         /// A proxy, strongly-typed property to the underlying DataContext
         /// </summary>
-        public RootViewModel ViewModel => DataContext as RootViewModel;
+        public RootViewModel ViewModel
+        {
+            get { return DataContext as RootViewModel; }
+        }
 
         #endregion
 

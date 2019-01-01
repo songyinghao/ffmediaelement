@@ -90,7 +90,8 @@
                         var parts = line.Split(separator, 2);
                         if (parts.Length >= 2)
                         {
-                            if (int.TryParse(parts[0], out var index))
+                            int index;
+                            if (int.TryParse(parts[0], out index))
                                 result.StreamIndex = index;
 
                             result.SourceUrl = parts[1].Trim(trimQuotes).Replace("\"\"", "\"");
@@ -113,8 +114,11 @@
 
                     if (state == 5 && string.IsNullOrWhiteSpace(line) == false)
                     {
-                        if (VideoSeekIndexEntry.FromCsvString(line) is VideoSeekIndexEntry entry)
+                        var entry = VideoSeekIndexEntry.FromCsvString(line);
+                        if (entry != null)
+                        {
                             result.Entries.Add(entry);
+                        }
                     }
                 }
             }
@@ -128,7 +132,7 @@
         /// <param name="stream">The stream to write data to.</param>
         public void Save(Stream stream)
         {
-            using (var writer = new StreamWriter(stream, Encoding.UTF8, 4096, true))
+            using (var writer = new StreamWriter(stream, Encoding.UTF8, 4096))
             {
                 writer.WriteLine(SectionHeaderText);
                 writer.WriteLine(SectionHeaderFields);
@@ -246,8 +250,10 @@
         private class VideoSeekIndexEntryComparer : IComparer<VideoSeekIndexEntry>
         {
             /// <inheritdoc />
-            public int Compare(VideoSeekIndexEntry x, VideoSeekIndexEntry y) =>
-                x.StartTime.Ticks.CompareTo(y.StartTime.Ticks);
+            public int Compare(VideoSeekIndexEntry x, VideoSeekIndexEntry y)
+            {
+                return x.StartTime.Ticks.CompareTo(y.StartTime.Ticks);
+            }
         }
     }
 }

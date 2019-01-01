@@ -112,8 +112,9 @@
 
             // Allocate the unmanaged output buffer and convert to stereo.
             int outputSamplesPerChannel;
+            IDisposable writeLock;
             if (target.Allocate(targetSpec.BufferLength) &&
-                target.TryAcquireWriterLock(out var writeLock))
+                target.TryAcquireWriterLock(out writeLock))
             {
                 using (writeLock)
                 {

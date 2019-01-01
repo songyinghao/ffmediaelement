@@ -88,7 +88,10 @@
         /// <summary>
         /// Gets the pointer to the unmanaged subtitle struct
         /// </summary>
-        internal AVSubtitle* Pointer => (AVSubtitle*)InternalPointer;
+        internal AVSubtitle* Pointer
+        {
+            get { return (AVSubtitle*) InternalPointer; }
+        }
 
         #endregion
 

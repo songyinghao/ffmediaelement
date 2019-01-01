@@ -41,8 +41,8 @@
         /// </summary>
         public Visibility IsMediaOpenVisibility
         {
-            get => m_IsMediaOpenVisibility;
-            set => SetProperty(ref m_IsMediaOpenVisibility, value);
+            get { return m_IsMediaOpenVisibility; }
+            set { SetProperty(ref m_IsMediaOpenVisibility, value); }
         }
 
         /// <summary>
@@ -50,8 +50,8 @@
         /// </summary>
         public bool IsAudioControlEnabled
         {
-            get => m_IsAudioControlEnabled;
-            set => SetProperty(ref m_IsAudioControlEnabled, value);
+            get { return m_IsAudioControlEnabled; }
+            set { SetProperty(ref m_IsAudioControlEnabled, value); }
         }
 
         /// <summary>
@@ -59,8 +59,8 @@
         /// </summary>
         public Visibility ClosedCaptionsVisibility
         {
-            get => m_ClosedCaptionsVisibility;
-            set => SetProperty(ref m_ClosedCaptionsVisibility, value);
+            get { return m_ClosedCaptionsVisibility; }
+            set { SetProperty(ref m_ClosedCaptionsVisibility, value); }
         }
 
         /// <summary>
@@ -68,8 +68,8 @@
         /// </summary>
         public bool IsSpeedRatioEnabled
         {
-            get => m_IsSpeedRatioEnabled;
-            set => SetProperty(ref m_IsSpeedRatioEnabled, value);
+            get { return m_IsSpeedRatioEnabled; }
+            set { SetProperty(ref m_IsSpeedRatioEnabled, value); }
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         /// </summary>
         public Visibility AudioControlVisibility
         {
-            get => m_AudioControlVisibility;
-            set => SetProperty(ref m_AudioControlVisibility, value);
+            get { return m_AudioControlVisibility; }
+            set { SetProperty(ref m_AudioControlVisibility, value); }
         }
 
         /// <summary>
@@ -86,8 +86,8 @@
         /// </summary>
         public Visibility PauseButtonVisibility
         {
-            get => m_PauseButtonVisibility;
-            set => SetProperty(ref m_PauseButtonVisibility, value);
+            get { return m_PauseButtonVisibility; }
+            set { SetProperty(ref m_PauseButtonVisibility, value); }
         }
 
         /// <summary>
@@ -95,8 +95,8 @@
         /// </summary>
         public Visibility PlayButtonVisibility
         {
-            get => m_PlayButtonVisibility;
-            set => SetProperty(ref m_PlayButtonVisibility, value);
+            get { return m_PlayButtonVisibility; }
+            set { SetProperty(ref m_PlayButtonVisibility, value); }
         }
 
         /// <summary>
@@ -104,8 +104,8 @@
         /// </summary>
         public Visibility StopButtonVisibility
         {
-            get => m_StopButtonVisibility;
-            set => SetProperty(ref m_StopButtonVisibility, value);
+            get { return m_StopButtonVisibility; }
+            set { SetProperty(ref m_StopButtonVisibility, value); }
         }
 
         /// <summary>
@@ -113,8 +113,8 @@
         /// </summary>
         public Visibility CloseButtonVisibility
         {
-            get => m_CloseButtonVisibility;
-            set => SetProperty(ref m_CloseButtonVisibility, value);
+            get { return m_CloseButtonVisibility; }
+            set { SetProperty(ref m_CloseButtonVisibility, value); }
         }
 
         /// <summary>
@@ -122,8 +122,8 @@
         /// </summary>
         public Visibility OpenButtonVisibility
         {
-            get => m_OpenButtonVisibility;
-            set => SetProperty(ref m_OpenButtonVisibility, value);
+            get { return m_OpenButtonVisibility; }
+            set { SetProperty(ref m_OpenButtonVisibility, value); }
         }
 
         /// <summary>
@@ -131,8 +131,8 @@
         /// </summary>
         public Visibility SeekBarVisibility
         {
-            get => m_SeekBarVisibility;
-            set => SetProperty(ref m_SeekBarVisibility, value);
+            get { return m_SeekBarVisibility; }
+            set { SetProperty(ref m_SeekBarVisibility, value); }
         }
 
         /// <summary>
@@ -140,8 +140,8 @@
         /// </summary>
         public Visibility BufferingProgressVisibility
         {
-            get => m_BufferingProgressVisibility;
-            set => SetProperty(ref m_BufferingProgressVisibility, value);
+            get { return m_BufferingProgressVisibility; }
+            set { SetProperty(ref m_BufferingProgressVisibility, value); }
         }
 
         /// <summary>
@@ -149,8 +149,8 @@
         /// </summary>
         public Visibility DownloadProgressVisibility
         {
-            get => m_DownloadProgressVisibility;
-            set => SetProperty(ref m_DownloadProgressVisibility, value);
+            get { return m_DownloadProgressVisibility; }
+            set { SetProperty(ref m_DownloadProgressVisibility, value); }
         }
 
         /// <summary>

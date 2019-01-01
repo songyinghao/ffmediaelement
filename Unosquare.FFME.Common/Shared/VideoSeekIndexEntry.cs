@@ -81,8 +81,11 @@
         }
 
         /// <inheritdoc />
-        public override string ToString() =>
-            $"IX: {StreamIndex} | TB: {StreamTimeBase.num}/{StreamTimeBase.den} | ST: {StartTime.Format()} | PTS: {PresentationTime} | DTS: {DecodingTime}";
+        public override string ToString()
+        {
+            return
+                $"IX: {StreamIndex} | TB: {StreamTimeBase.num}/{StreamTimeBase.den} | ST: {StartTime.Format()} | PTS: {PresentationTime} | DTS: {DecodingTime}";
+        }
 
         /// <summary>
         /// Creates an entry based on a CSV string
@@ -92,13 +95,19 @@
         internal static VideoSeekIndexEntry FromCsvString(string line)
         {
             var parts = line.Split(CommaSeparator);
+            int streamIndex;
+            int timeBaseNum;
+            int timeBaseDen;
+            long startTimeTicks;
+            long presentationTime;
+            long decodingTime;
             if (parts.Length >= 6 &&
-                int.TryParse(parts[0], out var streamIndex) &&
-                int.TryParse(parts[1], out var timeBaseNum) &&
-                int.TryParse(parts[2], out var timeBaseDen) &&
-                long.TryParse(parts[3], out var startTimeTicks) &&
-                long.TryParse(parts[4], out var presentationTime) &&
-                long.TryParse(parts[5], out var decodingTime))
+                int.TryParse(parts[0], out streamIndex) &&
+                int.TryParse(parts[1], out timeBaseNum) &&
+                int.TryParse(parts[2], out timeBaseDen) &&
+                long.TryParse(parts[3], out startTimeTicks) &&
+                long.TryParse(parts[4], out presentationTime) &&
+                long.TryParse(parts[5], out decodingTime))
             {
                 return new VideoSeekIndexEntry(
                     streamIndex, timeBaseNum, timeBaseDen, startTimeTicks, presentationTime, decodingTime);
@@ -111,7 +120,10 @@
         /// Converts values of this instance to a line of CSV text.
         /// </summary>
         /// <returns>The comma-separated values</returns>
-        internal string ToCsvString() =>
-            $"{StreamIndex},{StreamTimeBase.num},{StreamTimeBase.den},{StartTime.Ticks},{PresentationTime},{DecodingTime}";
+        internal string ToCsvString()
+        {
+            return
+                $"{StreamIndex},{StreamTimeBase.num},{StreamTimeBase.den},{StartTime.Ticks},{PresentationTime},{DecodingTime}";
+        }
     }
 }

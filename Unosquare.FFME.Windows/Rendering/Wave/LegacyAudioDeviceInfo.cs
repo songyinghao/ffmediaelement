@@ -76,57 +76,90 @@ namespace Unosquare.FFME.Rendering.Wave
         /// <summary>
         /// Number of channels supported
         /// </summary>
-        public int Channels => channels;
+        public int Channels
+        {
+            get { return channels; }
+        }
 
         /// <summary>
         /// Whether playback rate control is supported
         /// </summary>
-        public bool SupportsPlaybackRateControl => support.HasFlag(WaveOutSupport.PlaybackRate);
+        public bool SupportsPlaybackRateControl
+        {
+            get { return support.HasFlag(WaveOutSupport.PlaybackRate); }
+        }
 
         /// <summary>
         /// Whether volume control is supported
         /// </summary>
-        public bool SupportsVolumeControl => support.HasFlag(WaveOutSupport.Volume);
+        public bool SupportsVolumeControl
+        {
+            get { return support.HasFlag(WaveOutSupport.Volume); }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this device supports independent channel volume control.
         /// </summary>
-        public bool SupportsChannelVolumeControl => support.HasFlag(WaveOutSupport.LRVolume);
+        public bool SupportsChannelVolumeControl
+        {
+            get { return support.HasFlag(WaveOutSupport.LRVolume); }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this device supports pitch control.
         /// </summary>
-        public bool SupportsPitchControl => support.HasFlag(WaveOutSupport.Pitch);
+        public bool SupportsPitchControl
+        {
+            get { return support.HasFlag(WaveOutSupport.Pitch); }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the device returns sample-accurate position information.
         /// </summary>
-        public bool SupportsSampleAccuratePosition => support.HasFlag(WaveOutSupport.SampleAccurate);
+        public bool SupportsSampleAccuratePosition
+        {
+            get { return support.HasFlag(WaveOutSupport.SampleAccurate); }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the driver is synchronous and will block while playing a buffer.
         /// </summary>
-        public bool IsSynchronousOutput => support.HasFlag(WaveOutSupport.Sync);
+        public bool IsSynchronousOutput
+        {
+            get { return support.HasFlag(WaveOutSupport.Sync); }
+        }
 
         /// <summary>
         /// The product name
         /// </summary>
-        public string ProductName => productName;
+        public string ProductName
+        {
+            get { return productName; }
+        }
 
         /// <summary>
         /// The device name Guid (if provided)
         /// </summary>
-        public Guid NameGuid => nameGuid;
+        public Guid NameGuid
+        {
+            get { return nameGuid; }
+        }
 
         /// <summary>
         /// The product name Guid (if provided)
         /// </summary>
-        public Guid ProductGuid => productGuid;
+        public Guid ProductGuid
+        {
+            get { return productGuid; }
+        }
 
         /// <summary>
         /// The manufacturer guid (if provided)
         /// </summary>
-        public Guid ManufacturerGuid => manufacturerGuid;
+        public Guid ManufacturerGuid
+        {
+            get { return manufacturerGuid; }
+        }
 
         #endregion
 
@@ -152,7 +185,10 @@ namespace Unosquare.FFME.Rendering.Wave
         /// </summary>
         /// <param name="waveFormat">The SupportedWaveFormat</param>
         /// <returns>true if supported</returns>
-        internal bool SupportsWaveFormat(SupportedWaveFormat waveFormat) => (supportedFormats & waveFormat) == waveFormat;
+        internal bool SupportsWaveFormat(SupportedWaveFormat waveFormat)
+        {
+            return (supportedFormats & waveFormat) == waveFormat;
+        }
 
         #endregion
     }

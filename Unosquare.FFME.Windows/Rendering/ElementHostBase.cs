@@ -10,6 +10,7 @@
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Threading;
+    using Unosquare.Threading;
 
     /// <summary>
     /// Provides a base class for a framework element that is capable of
@@ -45,8 +46,8 @@
         /// </summary>
         public event RoutedEventHandler ElementLoaded
         {
-            add => AddHandler(ElementLoadedEvent, value);
-            remove => RemoveHandler(ElementLoadedEvent, value);
+            add { AddHandler(ElementLoadedEvent, value); }
+            remove { RemoveHandler(ElementLoadedEvent, value); }
         }
 
         /// <summary>
@@ -116,7 +117,7 @@
         /// </summary>
         /// <param name="action">The action.</param>
         /// <returns>The awaitable operation</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public Task InvokeAsync(Action action)
         {
             return InvokeAsync(DispatcherPriority.Normal, action);
@@ -128,20 +129,23 @@
         /// <param name="priority">The priority.</param>
         /// <param name="action">The action.</param>
         /// <returns>The awaitable operation</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public Task InvokeAsync(DispatcherPriority priority, Action action)
         {
             if (action == null)
-                return Task.CompletedTask;
+                return TaskEx.CompletedTask;
 
             if (ElementDispatcher == null || ElementDispatcher.HasShutdownStarted || ElementDispatcher.HasShutdownFinished)
-                return Task.CompletedTask;
+                return TaskEx.CompletedTask;
 
             if (Thread.CurrentThread != ElementDispatcher?.Thread)
-                return ElementDispatcher?.BeginInvoke(action, priority).Task;
+            {
+                ElementDispatcher?.BeginInvoke(action, priority);
+                return TaskEx.CompletedTask;
+            }
 
             action();
-            return Task.CompletedTask;
+            return TaskEx.CompletedTask;
         }
 
         /// <inheritdoc />
@@ -173,7 +177,10 @@
         }
 
         /// <inheritdoc />
-        protected override Visual GetVisualChild(int index) => HasOwnDispatcher ? Host : (Visual)Element;
+        protected override Visual GetVisualChild(int index)
+        {
+            return HasOwnDispatcher ? Host : (Visual) Element;
+        }
 
         /// <summary>
         /// Creates the element contained by this host
@@ -198,7 +205,7 @@
         protected override Size MeasureOverride(Size newAvailableSize)
         {
             var previousAvailableSize = AvailableSize;
-            var previousDesiredSize = Element?.DesiredSize ?? default;
+            var previousDesiredSize = Element?.DesiredSize ?? default(Size);
             var availableSizeChanged = previousAvailableSize != newAvailableSize;
 
             AvailableSize = newAvailableSize;
@@ -211,17 +218,19 @@
                 InvokeAsync(DispatcherPriority.DataBind, () =>
                 {
                     Element?.Measure(newAvailableSize);
-                    var desiredSizeChanged = previousDesiredSize != (Element?.DesiredSize ?? default);
+                    var desiredSizeChanged = previousDesiredSize != (Element?.DesiredSize ?? default(Size));
 
                     if (availableSizeChanged || desiredSizeChanged)
-                        Dispatcher.InvokeAsync(InvalidateMeasure, DispatcherPriority.Render);
+                    {
+                        Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)InvalidateMeasure);
+                    }
                 });
 
                 if (availableSizeChanged)
                     return previousDesiredSize;
             }
 
-            return Element?.DesiredSize ?? default;
+            return Element?.DesiredSize ?? default(Size);
         }
 
         /// <summary>
@@ -303,8 +312,10 @@
                 PresentationSource.RootVisual = Element;
                 Element.SizeChanged += (snd, eva) =>
                 {
-                    if (eva.PreviousSize == default || eva.NewSize == default)
-                        Dispatcher.Invoke(InvalidateMeasure);
+                    if (eva.PreviousSize == default(Size) || eva.NewSize == default(Size))
+                    {
+                        Dispatcher.Invoke((Action)InvalidateMeasure);
+                    }
                 };
 
                 // Running the dispatcher makes it run on its own thread
@@ -343,12 +354,15 @@
             /// Initializes a new instance of the <see cref="HostedPresentationSource"/> class.
             /// </summary>
             /// <param name="host">The host.</param>
-            public HostedPresentationSource(HostVisual host) => HostConnector = new VisualTarget(host);
+            public HostedPresentationSource(HostVisual host)
+            {
+                HostConnector = new VisualTarget(host);
+            }
 
             /// <inheritdoc />
             public override Visual RootVisual
             {
-                get => HostConnector.RootVisual;
+                get { return HostConnector.RootVisual; }
                 set
                 {
                     var oldRoot = HostConnector.RootVisual;
@@ -372,13 +386,22 @@
             }
 
             /// <inheritdoc />
-            public override bool IsDisposed => m_IsDisposed.Value;
+            public override bool IsDisposed
+            {
+                get { return m_IsDisposed.Value; }
+            }
 
             /// <inheritdoc />
-            public void Dispose() => Dispose(true);
+            public void Dispose()
+            {
+                Dispose(true);
+            }
 
             /// <inheritdoc />
-            protected override CompositionTarget GetCompositionTargetCore() => HostConnector;
+            protected override CompositionTarget GetCompositionTargetCore()
+            {
+                return HostConnector;
+            }
 
             /// <summary>
             /// Releases unmanaged and - optionally - managed resources.

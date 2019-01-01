@@ -46,20 +46,29 @@
         /// Creates a reader-writer lock backed by a standard ReaderWriterLock
         /// </summary>
         /// <returns>The synchronized locker</returns>
-        public static ISyncLocker Create() => new SyncLocker();
+        public static ISyncLocker Create()
+        {
+            return new SyncLocker();
+        }
 
         /// <summary>
         /// Creates a reader-writer lock backed by a ReaderWriterLockSlim
         /// </summary>
         /// <returns>The synchronized locker</returns>
-        public static ISyncLocker CreateSlim() => new SyncLockerSlim();
+        public static ISyncLocker CreateSlim()
+        {
+            return new SyncLockerSlim();
+        }
 
         /// <summary>
         /// Creates a reader-writer lock.
         /// </summary>
         /// <param name="useSlim">if set to <c>true</c> it uses the Slim version of a reader-writer lock.</param>
         /// <returns>The Sync Locker</returns>
-        public static ISyncLocker Create(bool useSlim) => useSlim ? CreateSlim() : Create();
+        public static ISyncLocker Create(bool useSlim)
+        {
+            return useSlim ? CreateSlim() : Create();
+        }
 
         #endregion
 
@@ -89,7 +98,7 @@
             /// <summary>
             /// An action-less, dummy disposable object.
             /// </summary>
-            public static SyncLockReleaser Empty { get; } = new SyncLockReleaser(null, default);
+            public static SyncLockReleaser Empty { get; } = new SyncLockReleaser(null, default(LockHolderType));
 
             /// <inheritdoc />
             public void Dispose()
@@ -117,43 +126,62 @@
             /// <summary>
             /// Gets a value indicating whether this instance is disposed.
             /// </summary>
-            public bool IsDisposed => m_IsDisposed.Value;
+            public bool IsDisposed
+            {
+                get { return m_IsDisposed.Value; }
+            }
 
             /// <inheritdoc />
             public IDisposable AcquireReaderLock()
             {
-                AcquireReaderLock(Timeout.Infinite, out var releaser);
+                IDisposable releaser;
+                AcquireReaderLock(Timeout.Infinite, out releaser);
                 return releaser;
             }
 
             /// <inheritdoc />
-            public bool TryAcquireReaderLock(int timeoutMilliseconds, out IDisposable locker) =>
-                AcquireReaderLock(timeoutMilliseconds, out locker);
+            public bool TryAcquireReaderLock(int timeoutMilliseconds, out IDisposable locker)
+            {
+                return AcquireReaderLock(timeoutMilliseconds, out locker);
+            }
 
             /// <inheritdoc />
             public IDisposable AcquireWriterLock()
             {
-                AcquireWriterLock(Timeout.Infinite, out var releaser);
+                IDisposable releaser;
+                AcquireWriterLock(Timeout.Infinite, out releaser);
                 return releaser;
             }
 
             /// <inheritdoc />
-            public bool TryAcquireWriterLock(int timeoutMilliseconds, out IDisposable locker) =>
-                AcquireWriterLock(timeoutMilliseconds, out locker);
+            public bool TryAcquireWriterLock(int timeoutMilliseconds, out IDisposable locker)
+            {
+                return AcquireWriterLock(timeoutMilliseconds, out locker);
+            }
 
             /// <inheritdoc />
-            public bool TryAcquireWriterLock(out IDisposable locker) =>
-                TryAcquireWriterLock(DefaultTimeout, out locker);
+            public bool TryAcquireWriterLock(out IDisposable locker)
+            {
+                return TryAcquireWriterLock(DefaultTimeout, out locker);
+            }
 
             /// <inheritdoc />
-            public bool TryAcquireReaderLock(out IDisposable locker) =>
-                TryAcquireReaderLock(DefaultTimeout, out locker);
+            public bool TryAcquireReaderLock(out IDisposable locker)
+            {
+                return TryAcquireReaderLock(DefaultTimeout, out locker);
+            }
 
             /// <inheritdoc />
-            public void ReleaseWriterLock() => Locker.ReleaseWriterLock();
+            public void ReleaseWriterLock()
+            {
+                Locker.ReleaseWriterLock();
+            }
 
             /// <inheritdoc />
-            public void ReleaseReaderLock() => Locker.ReleaseReaderLock();
+            public void ReleaseReaderLock()
+            {
+                Locker.ReleaseReaderLock();
+            }
 
             /// <inheritdoc />
             public void Dispose()
@@ -219,43 +247,62 @@
             private readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
             /// <inheritdoc />
-            public bool IsDisposed => m_IsDisposed.Value;
+            public bool IsDisposed
+            {
+                get { return m_IsDisposed.Value; }
+            }
 
             /// <inheritdoc />
             public IDisposable AcquireReaderLock()
             {
-                AcquireReaderLock(Timeout.Infinite, out var releaser);
+                IDisposable releaser;
+                AcquireReaderLock(Timeout.Infinite, out releaser);
                 return releaser;
             }
 
             /// <inheritdoc />
-            public bool TryAcquireReaderLock(int timeoutMilliseconds, out IDisposable locker) =>
-                AcquireReaderLock(timeoutMilliseconds, out locker);
+            public bool TryAcquireReaderLock(int timeoutMilliseconds, out IDisposable locker)
+            {
+                return AcquireReaderLock(timeoutMilliseconds, out locker);
+            }
 
             /// <inheritdoc />
             public IDisposable AcquireWriterLock()
             {
-                AcquireWriterLock(Timeout.Infinite, out var releaser);
+                IDisposable releaser;
+                AcquireWriterLock(Timeout.Infinite, out releaser);
                 return releaser;
             }
 
             /// <inheritdoc />
-            public bool TryAcquireWriterLock(int timeoutMilliseconds, out IDisposable locker) =>
-                AcquireWriterLock(timeoutMilliseconds, out locker);
+            public bool TryAcquireWriterLock(int timeoutMilliseconds, out IDisposable locker)
+            {
+                return AcquireWriterLock(timeoutMilliseconds, out locker);
+            }
 
             /// <inheritdoc />
-            public bool TryAcquireWriterLock(out IDisposable locker) =>
-                TryAcquireWriterLock(DefaultTimeout, out locker);
+            public bool TryAcquireWriterLock(out IDisposable locker)
+            {
+                return TryAcquireWriterLock(DefaultTimeout, out locker);
+            }
 
             /// <inheritdoc />
-            public bool TryAcquireReaderLock(out IDisposable locker) =>
-                TryAcquireReaderLock(DefaultTimeout, out locker);
+            public bool TryAcquireReaderLock(out IDisposable locker)
+            {
+                return TryAcquireReaderLock(DefaultTimeout, out locker);
+            }
 
             /// <inheritdoc />
-            public void ReleaseWriterLock() => Locker.ExitWriteLock();
+            public void ReleaseWriterLock()
+            {
+                Locker.ExitWriteLock();
+            }
 
             /// <inheritdoc />
-            public void ReleaseReaderLock() => Locker.ExitReadLock();
+            public void ReleaseReaderLock()
+            {
+                Locker.ExitReadLock();
+            }
 
             /// <inheritdoc />
             public void Dispose()

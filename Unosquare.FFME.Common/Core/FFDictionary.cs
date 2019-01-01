@@ -49,7 +49,10 @@
         /// <summary>
         /// Gets the unmanaged pointer to the dictionary object.
         /// </summary>
-        public AVDictionary* Pointer => (AVDictionary*)m_Pointer;
+        public AVDictionary* Pointer
+        {
+            get { return (AVDictionary*) m_Pointer; }
+        }
 
         /// <summary>
         /// Gets the number of elements in the dictionary
@@ -57,7 +60,10 @@
         /// <value>
         /// The count.
         /// </value>
-        public int Count => m_Pointer == IntPtr.Zero ? 0 : ffmpeg.av_dict_count(Pointer);
+        public int Count
+        {
+            get { return m_Pointer == IntPtr.Zero ? 0 : ffmpeg.av_dict_count(Pointer); }
+        }
 
         /// <summary>
         /// Gets or sets the value with the specified key.
@@ -69,8 +75,8 @@
         /// <returns>The entry</returns>
         public string this[string key]
         {
-            get => Get(key);
-            set => Set(key, value, false);
+            get { return Get(key); }
+            set { Set(key, value, false); }
         }
 
         #endregion

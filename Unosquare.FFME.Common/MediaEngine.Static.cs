@@ -9,6 +9,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Unosquare.FFME.Common.NET4.Shared;
 
     public partial class MediaEngine
     {
@@ -66,7 +67,7 @@
         /// </summary>
         public static string FFmpegDirectory
         {
-            get => m_FFmpegDirectory;
+            get { return m_FFmpegDirectory; }
             set
             {
                 if (FFInterop.IsInitialized)
@@ -92,7 +93,7 @@
         /// </summary>
         public static int FFmpegLoadModeFlags
         {
-            get => m_FFmpegLoadModeFlags;
+            get { return m_FFmpegLoadModeFlags; }
             set
             {
                 if (FFInterop.IsInitialized)

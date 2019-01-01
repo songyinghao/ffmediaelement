@@ -95,8 +95,8 @@
             lock (SyncLock)
             {
                 Packets.Add(packet);
-                m_BufferLength += packet.Size < 0 ? default : packet.Size;
-                m_Duration += packet.Duration < 0 ? default : packet.Duration;
+                m_BufferLength += packet.Size < 0 ? default(int) : packet.Size;
+                m_Duration += packet.Duration < 0 ? default(long) : packet.Duration;
             }
         }
 
@@ -113,8 +113,8 @@
                 Packets.RemoveAt(0);
 
                 var packet = result;
-                m_BufferLength -= packet.Size < 0 ? default : packet.Size;
-                m_Duration -= packet.Duration < 0 ? default : packet.Duration;
+                m_BufferLength -= packet.Size < 0 ? default(int) : packet.Size;
+                m_Duration -= packet.Duration < 0 ? default(long) : packet.Duration;
                 return packet;
             }
         }
@@ -142,7 +142,10 @@
         #region IDisposable Support
 
         /// <inheritdoc />
-        public void Dispose() => Dispose(true);
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.

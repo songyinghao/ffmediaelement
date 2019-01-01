@@ -15,14 +15,20 @@
         /// </summary>
         /// <param name="isCompleted">if initially set to completed. Generally true</param>
         /// <returns>The Wait Event</returns>
-        public static IWaitEvent Create(bool isCompleted) => new WaitEvent(isCompleted);
+        public static IWaitEvent Create(bool isCompleted)
+        {
+            return new WaitEvent(isCompleted);
+        }
 
         /// <summary>
         /// Creates a Wait Event backed by a ManualResetEventSlim
         /// </summary>
         /// <param name="isCompleted">if initially set to completed. Generally true</param>
         /// <returns>The Wait Event</returns>
-        public static IWaitEvent CreateSlim(bool isCompleted) => new WaitEventSlim(isCompleted);
+        public static IWaitEvent CreateSlim(bool isCompleted)
+        {
+            return new WaitEventSlim(isCompleted);
+        }
 
         /// <summary>
         /// Creates a Wait Event backed by a ManualResetEventSlim
@@ -30,7 +36,10 @@
         /// <param name="isCompleted">if initially set to completed. Generally true</param>
         /// <param name="useSlim">if set to <c>true</c> creates a slim version of the wait event.</param>
         /// <returns>The Wait Event</returns>
-        public static IWaitEvent Create(bool isCompleted, bool useSlim) => useSlim ? CreateSlim(isCompleted) : Create(isCompleted);
+        public static IWaitEvent Create(bool isCompleted, bool useSlim)
+        {
+            return useSlim ? CreateSlim(isCompleted) : Create(isCompleted);
+        }
 
         #endregion
 
@@ -58,8 +67,8 @@
             /// <inheritdoc />
             public bool IsDisposed
             {
-                get => m_IsDisposed.Value;
-                private set => m_IsDisposed.Value = value;
+                get { return m_IsDisposed.Value; }
+                private set { m_IsDisposed.Value = value; }
             }
 
             /// <inheritdoc />
@@ -74,10 +83,16 @@
             }
 
             /// <inheritdoc />
-            public bool IsCompleted => IsValid == false || Event.WaitOne(0);
+            public bool IsCompleted
+            {
+                get { return IsValid == false || Event.WaitOne(0); }
+            }
 
             /// <inheritdoc />
-            public bool IsInProgress => !IsCompleted;
+            public bool IsInProgress
+            {
+                get { return !IsCompleted; }
+            }
 
             /// <inheritdoc />
             public void Begin() { if (IsDisposed) Event.Reset(); }
@@ -99,7 +114,10 @@
             public void Wait() { if (IsDisposed) Event.WaitOne(); }
 
             /// <inheritdoc />
-            public bool Wait(TimeSpan timeout) => IsDisposed || Event.WaitOne(timeout);
+            public bool Wait(TimeSpan timeout)
+            {
+                return IsDisposed || Event.WaitOne(timeout);
+            }
         }
 
         /// <inheritdoc />
@@ -124,8 +142,8 @@
             /// <inheritdoc />
             public bool IsDisposed
             {
-                get => m_IsDisposed.Value;
-                private set => m_IsDisposed.Value = value;
+                get { return m_IsDisposed.Value; }
+                private set { m_IsDisposed.Value = value; }
             }
 
             /// <inheritdoc />
@@ -141,10 +159,16 @@
             }
 
             /// <inheritdoc />
-            public bool IsCompleted => IsValid == false || Event.IsSet;
+            public bool IsCompleted
+            {
+                get { return IsValid == false || Event.IsSet; }
+            }
 
             /// <inheritdoc />
-            public bool IsInProgress => !IsCompleted;
+            public bool IsInProgress
+            {
+                get { return !IsCompleted; }
+            }
 
             /// <inheritdoc />
             public void Begin() { if (IsDisposed == false) Event.Reset(); }
@@ -166,7 +190,10 @@
             public void Wait() { if (IsDisposed == false) Event.Wait(); }
 
             /// <inheritdoc />
-            public bool Wait(TimeSpan timeout) => IsDisposed || Event.Wait(timeout);
+            public bool Wait(TimeSpan timeout)
+            {
+                return IsDisposed || Event.Wait(timeout);
+            }
         }
 
         #endregion

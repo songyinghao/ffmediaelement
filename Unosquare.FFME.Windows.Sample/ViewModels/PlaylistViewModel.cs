@@ -60,7 +60,8 @@
                 if (string.IsNullOrWhiteSpace(PlaylistSearchString) || PlaylistSearchString.Trim().Length < MinimumSearchLength)
                     return true;
 
-                if (item is CustomPlaylistEntry entry)
+                var entry = item as CustomPlaylistEntry;
+                if (entry != null)
                 {
                     return (entry.Title?.ToLowerInvariant().Contains(PlaylistSearchString) ?? false) ||
                            (entry.MediaUrl?.ToLowerInvariant().Contains(PlaylistSearchString) ?? false);
@@ -102,7 +103,7 @@
         /// </summary>
         public string PlaylistSearchString
         {
-            get => m_PlaylistSearchString;
+            get { return m_PlaylistSearchString; }
             set
             {
                 if (!SetProperty(ref m_PlaylistSearchString, value))
@@ -132,8 +133,8 @@
         /// </summary>
         public bool IsPlaylistEnabled
         {
-            get => m_IsPlaylistEnabled;
-            set => SetProperty(ref m_IsPlaylistEnabled, value);
+            get { return m_IsPlaylistEnabled; }
+            set { SetProperty(ref m_IsPlaylistEnabled, value); }
         }
 
         /// <summary>
@@ -141,8 +142,8 @@
         /// </summary>
         public bool IsInOpenMode
         {
-            get => m_IsInOpenMode;
-            set => SetProperty(ref m_IsInOpenMode, value);
+            get { return m_IsInOpenMode; }
+            set { SetProperty(ref m_IsInOpenMode, value); }
         }
 
         /// <summary>
@@ -150,8 +151,8 @@
         /// </summary>
         public string OpenTargetUrl
         {
-            get => m_OpenTargetUrl;
-            set => SetProperty(ref m_OpenTargetUrl, value);
+            get { return m_OpenTargetUrl; }
+            set { SetProperty(ref m_OpenTargetUrl, value); }
         }
 
         /// <inheritdoc />

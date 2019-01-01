@@ -28,10 +28,12 @@
         public bool HasEnoughPackets;
 
         /// <inheritdoc />
-        public bool Equals(PacketBufferState other) =>
-                    Length == other.Length &&
-                    Count == other.Count &&
-                    CountThreshold == other.CountThreshold &&
-                    HasEnoughPackets == other.HasEnoughPackets;
+        public bool Equals(PacketBufferState other)
+        {
+            return Length == other.Length &&
+                   Count == other.Count &&
+                   CountThreshold == other.CountThreshold &&
+                   HasEnoughPackets == other.HasEnoughPackets;
+        }
     }
 }

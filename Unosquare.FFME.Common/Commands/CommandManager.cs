@@ -58,12 +58,18 @@
         #region Properties
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => MediaCore;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return MediaCore; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether a direct command is currently executing.
         /// </summary>
-        public bool IsExecutingDirectCommand => DirectCommandEvent.IsInProgress;
+        public bool IsExecutingDirectCommand
+        {
+            get { return DirectCommandEvent.IsInProgress; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether a close command is in progress
@@ -92,14 +98,20 @@
         /// <summary>
         /// Gets a value indicating whether the media seeking is in progress.
         /// </summary>
-        public bool IsSeeking => IsActivelySeeking || HasQueuedSeekCommands;
+        public bool IsSeeking
+        {
+            get { return IsActivelySeeking || HasQueuedSeekCommands; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether a seek command is currently executing.
         /// This differs from the <see cref="IsSeeking"/> property as this is the realtime
         /// state of a seek operation as opposed to a general, delayed state of the command manager.
         /// </summary>
-        public bool IsActivelySeeking => SeekingCommandEvent.IsInProgress;
+        public bool IsActivelySeeking
+        {
+            get { return SeekingCommandEvent.IsInProgress; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether Reading, Decoding and Rendering workers are
@@ -107,8 +119,8 @@
         /// </summary>
         public bool IsStopWorkersPending
         {
-            get => m_IsStopWorkersPending.Value;
-            set => m_IsStopWorkersPending.Value = value;
+            get { return m_IsStopWorkersPending.Value; }
+            set { m_IsStopWorkersPending.Value = value; }
         }
 
         /// <summary>
@@ -220,15 +232,19 @@
         /// Begins playback of the media.
         /// </summary>
         /// <returns>The awaitable task. The task result determines if the command was successfully started</returns>
-        public async Task<bool> PlayAsync() =>
-            await ExecutePriorityCommand(CommandType.Play).ConfigureAwait(false);
+        public async Task<bool> PlayAsync()
+        {
+            return await ExecutePriorityCommand(CommandType.Play).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Pauses the playback of the media.
         /// </summary>
         /// <returns>The awaitable task. The task result determines if the command was successfully started</returns>
-        public async Task<bool> PauseAsync() =>
-            await ExecutePriorityCommand(CommandType.Pause).ConfigureAwait(false);
+        public async Task<bool> PauseAsync()
+        {
+            return await ExecutePriorityCommand(CommandType.Pause).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Stops the playback of the media.
@@ -277,14 +293,18 @@
         /// <summary>
         /// Waits for any current direct command to finish execution.
         /// </summary>
-        public void WaitForDirectCommand() =>
+        public void WaitForDirectCommand()
+        {
             DirectCommandEvent.Wait();
+        }
 
         /// <summary>
         /// Waits for an active seek command (if any) to complete.
         /// </summary>
-        public void WaitForActiveSeekCommand() =>
+        public void WaitForActiveSeekCommand()
+        {
             SeekingCommandEvent.Wait();
+        }
 
         /// <summary>
         /// Executes the next command in the queued.
@@ -319,7 +339,8 @@
                     if (HasSeekingStarted == false)
                     {
                         HasSeekingStarted.Value = true;
-                        PlayAfterSeek.Value = MediaCore.Clock.IsRunning && command is SeekCommand seekCommand &&
+                        var seekCommand = command as SeekCommand;
+                        PlayAfterSeek.Value = MediaCore.Clock.IsRunning && seekCommand != null &&
                              seekCommand.TargetSeekMode == SeekCommand.SeekMode.Normal;
 
                         MediaCore.SendOnSeekingStarted();
@@ -379,7 +400,7 @@
 
         #region Private Methods
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void DecrementPendingSeeks()
         {
             lock (QueueLock)
@@ -414,14 +435,14 @@
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void IncrementPendingSeeks() { lock (QueueLock) PendingSeekCount.Value++; }
 
         /// <summary>
         /// Clears the command queue.
         /// All commands are signaled so all awaiter handles stop awaiting.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void ClearCommandQueue()
         {
             lock (QueueLock)
@@ -585,7 +606,7 @@
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns>If direct command entering was successful</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private bool TryEnterDirectCommand(DirectCommandBase command)
         {
             lock (DirectLock)
@@ -617,7 +638,7 @@
         /// Prepares for direct command.
         /// </summary>
         /// <param name="commandType">Type of the command.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void PrepareForDirectCommand(CommandType commandType)
         {
             // Always pause the clock when opening, closing or changing media
@@ -652,7 +673,7 @@
         /// Finalizes the direct command by performing command post-processing.
         /// </summary>
         /// <param name="command">The command.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void FinalizeDirectCommand(DirectCommandBase command)
         {
             lock (StatusLock)

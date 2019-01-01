@@ -47,52 +47,82 @@
             /// <summary>
             /// The default speed ratio
             /// </summary>
-            public static double DefaultSpeedRatio => 1.0d;
+            public static double DefaultSpeedRatio
+            {
+                get { return 1.0d; }
+            }
 
             /// <summary>
             /// The default balance
             /// </summary>
-            public static double DefaultBalance => 0.0d;
+            public static double DefaultBalance
+            {
+                get { return 0.0d; }
+            }
 
             /// <summary>
             /// The default volume
             /// </summary>
-            public static double DefaultVolume => 1.0d;
+            public static double DefaultVolume
+            {
+                get { return 1.0d; }
+            }
 
             /// <summary>
             /// The default closed captions channel
             /// </summary>
-            public static CaptionsChannel DefaultClosedCaptionsChannel => CaptionsChannel.CCP;
+            public static CaptionsChannel DefaultClosedCaptionsChannel
+            {
+                get { return CaptionsChannel.CCP; }
+            }
 
             /// <summary>
             /// The minimum speed ratio
             /// </summary>
-            public static double MinSpeedRatio => 0.0d;
+            public static double MinSpeedRatio
+            {
+                get { return 0.0d; }
+            }
 
             /// <summary>
             /// The maximum speed ratio
             /// </summary>
-            public static double MaxSpeedRatio => 8.0d;
+            public static double MaxSpeedRatio
+            {
+                get { return 8.0d; }
+            }
 
             /// <summary>
             /// The minimum balance
             /// </summary>
-            public static double MinBalance => -1.0d;
+            public static double MinBalance
+            {
+                get { return -1.0d; }
+            }
 
             /// <summary>
             /// The maximum balance
             /// </summary>
-            public static double MaxBalance => 1.0d;
+            public static double MaxBalance
+            {
+                get { return 1.0d; }
+            }
 
             /// <summary>
             /// The maximum volume
             /// </summary>
-            public static double MaxVolume => 1.0d;
+            public static double MaxVolume
+            {
+                get { return 1.0d; }
+            }
 
             /// <summary>
             /// The minimum volume
             /// </summary>
-            public static double MinVolume => 0.0d;
+            public static double MinVolume
+            {
+                get { return 0.0d; }
+            }
         }
 
         /// <summary>
@@ -103,32 +133,50 @@
             /// <summary>
             /// The audio buffer padding
             /// </summary>
-            public static int BufferPadding => 256;
+            public static int BufferPadding
+            {
+                get { return 256; }
+            }
 
             /// <summary>
             /// The audio bits per sample (1 channel only)
             /// </summary>
-            public static int BitsPerSample => 16;
+            public static int BitsPerSample
+            {
+                get { return 16; }
+            }
 
             /// <summary>
             /// The audio bytes per sample
             /// </summary>
-            public static int BytesPerSample => BitsPerSample / 8;
+            public static int BytesPerSample
+            {
+                get { return BitsPerSample / 8; }
+            }
 
             /// <summary>
             /// The audio sample format
             /// </summary>
-            public static AVSampleFormat SampleFormat => AVSampleFormat.AV_SAMPLE_FMT_S16;
+            public static AVSampleFormat SampleFormat
+            {
+                get { return AVSampleFormat.AV_SAMPLE_FMT_S16; }
+            }
 
             /// <summary>
             /// The audio channel count
             /// </summary>
-            public static int ChannelCount => 2;
+            public static int ChannelCount
+            {
+                get { return 2; }
+            }
 
             /// <summary>
             /// The audio sample rate (per channel)
             /// </summary>
-            public static int SampleRate => 48000;
+            public static int SampleRate
+            {
+                get { return 48000; }
+            }
         }
 
         /// <summary>
@@ -139,22 +187,34 @@
             /// <summary>
             /// The video bits per component
             /// </summary>
-            public static int BitsPerComponent => 8;
+            public static int BitsPerComponent
+            {
+                get { return 8; }
+            }
 
             /// <summary>
             /// The video bits per pixel
             /// </summary>
-            public static int BitsPerPixel => 32;
+            public static int BitsPerPixel
+            {
+                get { return 32; }
+            }
 
             /// <summary>
             /// The video bytes per pixel
             /// </summary>
-            public static int BytesPerPixel => 4;
+            public static int BytesPerPixel
+            {
+                get { return 4; }
+            }
 
             /// <summary>
             /// The video pixel format. BGRA, 32bit
             /// </summary>
-            public static AVPixelFormat VideoPixelFormat => AVPixelFormat.AV_PIX_FMT_BGRA;
+            public static AVPixelFormat VideoPixelFormat
+            {
+                get { return AVPixelFormat.AV_PIX_FMT_BGRA; }
+            }
         }
 
         /// <summary>
@@ -165,17 +225,26 @@
             /// <summary>
             /// The timer high priority interval for stuff like rendering
             /// </summary>
-            public static TimeSpan HighPriority => TimeSpan.FromMilliseconds(15);
+            public static TimeSpan HighPriority
+            {
+                get { return TimeSpan.FromMilliseconds(15); }
+            }
 
             /// <summary>
             /// The timer medium priority interval for stuff like property updates
             /// </summary>
-            public static TimeSpan MediumPriority => TimeSpan.FromMilliseconds(25);
+            public static TimeSpan MediumPriority
+            {
+                get { return TimeSpan.FromMilliseconds(25); }
+            }
 
             /// <summary>
             /// The timer low priority interval for stuff like logging
             /// </summary>
-            public static TimeSpan LowPriority => TimeSpan.FromMilliseconds(40);
+            public static TimeSpan LowPriority
+            {
+                get { return TimeSpan.FromMilliseconds(40); }
+            }
         }
     }
 }

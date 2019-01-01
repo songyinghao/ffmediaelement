@@ -70,8 +70,8 @@
         /// </summary>
         internal bool IsSyncBuffering
         {
-            get => m_IsSyncBuffering.Value;
-            set => m_IsSyncBuffering.Value = value;
+            get { return m_IsSyncBuffering.Value; }
+            set { m_IsSyncBuffering.Value = value; }
         }
 
         /// <summary>
@@ -80,8 +80,8 @@
         /// </summary>
         internal bool HasDecodingEnded
         {
-            get => m_HasDecodingEnded.Value;
-            set => m_HasDecodingEnded.Value = value;
+            get { return m_HasDecodingEnded.Value; }
+            set { m_HasDecodingEnded.Value = value; }
         }
 
         /// <summary>
@@ -108,7 +108,10 @@
         /// Gets the buffer length maximum.
         /// port of MAX_QUEUE_SIZE (ffplay.c)
         /// </summary>
-        internal long BufferLengthMax => 16 * 1024 * 1024;
+        internal long BufferLengthMax
+        {
+            get { return 16 * 1024 * 1024; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether packets can be read and
@@ -142,16 +145,25 @@
         /// This is simply a bit-wise AND of negating <see cref="IsWorkerInterruptRequested"/> == false
         /// and <see cref="ShouldReadMorePackets"/>
         /// </summary>
-        private bool ShouldWorkerReadPackets => IsWorkerInterruptRequested == false && ShouldReadMorePackets;
+        private bool ShouldWorkerReadPackets
+        {
+            get { return IsWorkerInterruptRequested == false && ShouldReadMorePackets; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether a worker interrupt has been requested by the command manager.
         /// This instructs potentially long loops in workers to immediately exit.
         /// </summary>
-        private bool IsWorkerInterruptRequested => Commands.IsSeeking ||
-                    Commands.IsChanging ||
-                    Commands.IsClosing ||
-                    Commands.IsStopWorkersPending;
+        private bool IsWorkerInterruptRequested
+        {
+            get
+            {
+                return Commands.IsSeeking ||
+                       Commands.IsChanging ||
+                       Commands.IsClosing ||
+                       Commands.IsStopWorkersPending;
+            }
+        }
 
         #endregion
 
@@ -288,7 +300,7 @@
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns>The snapped, discrete, normalized position</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal TimeSpan SnapPositionToBlockPosition(TimeSpan position)
         {
             if (Container == null)
@@ -303,7 +315,7 @@
         /// <summary>
         /// Resumes the playback by resuming the clock and updating the playback state to state.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void ResumePlayback()
         {
             Clock.Play();
@@ -316,7 +328,7 @@
         /// </summary>
         /// <param name="position">The position.</param>
         /// <returns>The newly set position</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal TimeSpan ChangePosition(TimeSpan position)
         {
             Clock.Update(position);
@@ -329,7 +341,7 @@
         /// position to rhe <see cref="State"/>.
         /// </summary>
         /// <returns>The newly set position</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal TimeSpan ResetPosition()
         {
             Clock.Reset();
@@ -344,7 +356,7 @@
         /// <returns>
         ///   <c>true</c> if more frames can be decoded; otherwise, <c>false</c>.
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private bool CanReadMoreFramesOf(MediaType t)
         {
             return
@@ -361,7 +373,7 @@
         /// <returns>
         /// The number of blocks sent to the renderer
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private int SendBlockToRenderer(MediaBlock block, TimeSpan clockPosition)
         {
             // No blocks were rendered
@@ -389,7 +401,7 @@
         /// </summary>
         /// <param name="t">The MediaType.</param>
         /// <returns>True if a block could be added. False otherwise.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private bool AddNextBlock(MediaType t)
         {
             // Decode the frames
@@ -404,7 +416,7 @@
         /// <param name="block">The block.</param>
         /// <param name="clockPosition">The clock position.</param>
         /// <param name="renderIndex">Index of the render.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void LogRenderBlock(MediaBlock block, TimeSpan clockPosition, int renderIndex)
         {
             // Prevent logging for production use

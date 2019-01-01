@@ -73,10 +73,11 @@
                 if (entry == null)
                 {
                     // Create a new entry with default values
+                    Uri entryUri;
                     entry = new CustomPlaylistEntry
                     {
                         MediaUrl = mediaUrl,
-                        Title = Uri.TryCreate(mediaUrl, UriKind.RelativeOrAbsolute, out var entryUri)
+                        Title = Uri.TryCreate(mediaUrl, UriKind.RelativeOrAbsolute, out entryUri)
                             ? Path.GetFileNameWithoutExtension(Uri.UnescapeDataString(entryUri.AbsolutePath))
                             : $"Media File {DateTime.Now}"
                     };

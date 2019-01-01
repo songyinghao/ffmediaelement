@@ -37,6 +37,9 @@
             : this(() => { }, true) { }
 
         /// <inheritdoc />
-        protected override void PerformActions() => DeferredAction();
+        protected override void PerformActions()
+        {
+            DeferredAction();
+        }
     }
 }

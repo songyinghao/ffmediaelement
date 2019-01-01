@@ -23,16 +23,22 @@
         #region Event Signal Handling
 
         /// <inheritdoc />
-        public void OnBufferingEnded(MediaEngine sender) =>
+        public void OnBufferingEnded(MediaEngine sender)
+        {
             Parent?.PostBufferingEndedEvent();
+        }
 
         /// <inheritdoc />
-        public void OnBufferingStarted(MediaEngine sender) =>
+        public void OnBufferingStarted(MediaEngine sender)
+        {
             Parent?.PostBufferingStartedEvent();
+        }
 
         /// <inheritdoc />
-        public void OnMediaClosed(MediaEngine sender) =>
+        public void OnMediaClosed(MediaEngine sender)
+        {
             Parent?.PostMediaClosedEvent();
+        }
 
         /// <inheritdoc />
         public void OnMediaEnded(MediaEngine sender)
@@ -61,8 +67,10 @@
         }
 
         /// <inheritdoc />
-        public void OnMediaFailed(MediaEngine sender, Exception e) =>
+        public void OnMediaFailed(MediaEngine sender, Exception e)
+        {
             Parent?.PostMediaFailedEvent(e);
+        }
 
         /// <inheritdoc />
         public void OnMediaOpened(MediaEngine sender, MediaInfo mediaInfo)
@@ -98,32 +106,46 @@
         }
 
         /// <inheritdoc />
-        public void OnMediaOpening(MediaEngine sender, MediaOptions options, MediaInfo mediaInfo) =>
+        public void OnMediaOpening(MediaEngine sender, MediaOptions options, MediaInfo mediaInfo)
+        {
             Parent?.RaiseMediaOpeningEvent(options, mediaInfo);
+        }
 
         /// <inheritdoc />
-        public void OnMediaChanging(MediaEngine sender, MediaOptions options, MediaInfo mediaInfo) =>
+        public void OnMediaChanging(MediaEngine sender, MediaOptions options, MediaInfo mediaInfo)
+        {
             Parent?.RaiseMediaChangingEvent(options, mediaInfo);
+        }
 
         /// <inheritdoc />
-        public void OnMediaChanged(MediaEngine sender, MediaInfo mediaInfo) =>
+        public void OnMediaChanged(MediaEngine sender, MediaInfo mediaInfo)
+        {
             Parent?.PostMediaChangedEvent(mediaInfo);
+        }
 
         /// <inheritdoc />
-        public void OnMediaInitializing(MediaEngine sender, ContainerConfiguration config, string url) =>
+        public void OnMediaInitializing(MediaEngine sender, ContainerConfiguration config, string url)
+        {
             Parent?.RaiseMediaInitializingEvent(config, url);
+        }
 
         /// <inheritdoc />
-        public void OnMessageLogged(MediaEngine sender, MediaLogMessage e) =>
+        public void OnMessageLogged(MediaEngine sender, MediaLogMessage e)
+        {
             Parent?.RaiseMessageLoggedEvent(e);
+        }
 
         /// <inheritdoc />
-        public void OnSeekingEnded(MediaEngine sender) =>
+        public void OnSeekingEnded(MediaEngine sender)
+        {
             Parent?.PostSeekingEndedEvent();
+        }
 
         /// <inheritdoc />
-        public void OnSeekingStarted(MediaEngine sender) =>
+        public void OnSeekingStarted(MediaEngine sender)
+        {
             Parent?.PostSeekingStartedEvent();
+        }
 
         /// <inheritdoc />
         public void OnPositionChanged(MediaEngine sender, TimeSpan oldValue, TimeSpan newValue)

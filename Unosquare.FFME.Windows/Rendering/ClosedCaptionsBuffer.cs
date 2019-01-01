@@ -184,8 +184,8 @@
         /// </summary>
         public int CursorRowIndex
         {
-            get => m_CursorRowIndex;
-            private set => m_CursorRowIndex = value.Clamp(0, RowCount - 1);
+            get { return m_CursorRowIndex; }
+            private set { m_CursorRowIndex = value.Clamp(0, RowCount - 1); }
         }
 
         /// <summary>
@@ -193,8 +193,8 @@
         /// </summary>
         public int CursorColumnIndex
         {
-            get => m_CursorColumnIndex;
-            private set => m_CursorColumnIndex = value.Clamp(0, ColumnCount - 1);
+            get { return m_CursorColumnIndex; }
+            private set { m_CursorColumnIndex = value.Clamp(0, ColumnCount - 1); }
         }
 
         /// <summary>
@@ -348,7 +348,7 @@
             {
                 // Clear the packet buffers
                 LastReceiveTime = DateTime.UtcNow;
-                CurrentPacket = default;
+                CurrentPacket = default(ClosedCaptionPacket);
                 PacketBuffer.Clear();
                 for (var channel = 1; channel <= 4; channel++)
                     ChannelPacketBuffer[(CaptionsChannel)channel].Clear();
@@ -360,12 +360,12 @@
 
                 // Reset the parser state
                 CursorRowIndex = DefaultBaseRowIndex;
-                CursorColumnIndex = default;
+                CursorColumnIndex = default(int);
                 ScrollBaseRowIndex = DefaultBaseRowIndex;
                 ScrollSize = DefaultScrollSize;
                 StateMode = DefaultStateMode;
-                IsItalics = default;
-                IsUnderlined = default;
+                IsItalics = default(bool);
+                IsUnderlined = default(bool);
 
                 // Clear the state buffer
                 for (var rowIndex = 0; rowIndex < RowCount; rowIndex++)
@@ -503,7 +503,7 @@
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private static List<ClosedCaptionPacket> DequeuePackets(Dictionary<long, ClosedCaptionPacket> buffer, long upToTicks)
         {
             var result = new List<ClosedCaptionPacket>(buffer.Count);
@@ -520,7 +520,7 @@
             return result;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private bool ProcessCommandPacket(ClosedCaptionPacket packet)
         {
             var needsRepaint = false;
@@ -543,9 +543,9 @@
                         StateMode = ParserStateMode.Scrolling;
                         ScrollBaseRowIndex = DefaultBaseRowIndex;
                         CursorRowIndex = ScrollBaseRowIndex;
-                        CursorColumnIndex = default;
-                        IsItalics = default;
-                        IsUnderlined = default;
+                        CursorColumnIndex = default(int);
+                        IsItalics = default(bool);
+                        IsUnderlined = default(bool);
 
                         break;
                     }
@@ -574,8 +574,8 @@
                                 State[r][c].Display.Clear();
                         }
 
-                        IsItalics = default;
-                        IsUnderlined = default;
+                        IsItalics = default(bool);
+                        IsUnderlined = default(bool);
                         needsRepaint = true;
 
                         break;
@@ -612,9 +612,9 @@
                             }
 
                             CursorRowIndex = ScrollBaseRowIndex;
-                            CursorColumnIndex = default;
-                            IsItalics = default;
-                            IsUnderlined = default;
+                            CursorColumnIndex = default(int);
+                            IsItalics = default(bool);
+                            IsUnderlined = default(bool);
                             needsRepaint = true;
                         }
 
@@ -624,10 +624,10 @@
                 case CaptionsCommand.Resume:
                     {
                         StateMode = ParserStateMode.Buffered;
-                        CursorRowIndex = default;
-                        CursorColumnIndex = default;
-                        IsItalics = default;
-                        IsUnderlined = default;
+                        CursorRowIndex = default(int);
+                        CursorColumnIndex = default(int);
+                        IsItalics = default(bool);
+                        IsUnderlined = default(bool);
                         break;
                     }
 
@@ -648,9 +648,9 @@
 
                         if (StateMode == ParserStateMode.Buffered || StateMode == ParserStateMode.Scrolling)
                         {
-                            CursorColumnIndex = default;
-                            IsItalics = default;
-                            IsUnderlined = default;
+                            CursorColumnIndex = default(int);
+                            IsItalics = default(bool);
+                            IsUnderlined = default(bool);
                         }
 
                         break;
@@ -664,8 +664,8 @@
                                 State[r][c].Buffer.Clear();
                         }
 
-                        IsItalics = default;
-                        IsUnderlined = default;
+                        IsItalics = default(bool);
+                        IsUnderlined = default(bool);
                         break;
                     }
 
@@ -677,8 +677,8 @@
                                 State[r][c].Display.Clear();
                         }
 
-                        IsItalics = default;
-                        IsUnderlined = default;
+                        IsItalics = default(bool);
+                        IsUnderlined = default(bool);
                         needsRepaint = true;
                         break;
                     }
@@ -686,10 +686,10 @@
                 case CaptionsCommand.EndCaption:
                     {
                         StateMode = ParserStateMode.None;
-                        CursorRowIndex = default;
-                        CursorColumnIndex = default;
-                        IsItalics = default;
-                        IsUnderlined = default;
+                        CursorRowIndex = default(int);
+                        CursorColumnIndex = default(int);
+                        IsItalics = default(bool);
+                        IsUnderlined = default(bool);
                         needsRepaint = true;
 
                         for (var r = 0; r < RowCount; r++)
@@ -705,7 +705,7 @@
             return needsRepaint;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void ProcessPreamblePacket(ClosedCaptionPacket packet)
         {
             if (StateMode != ParserStateMode.Scrolling && StateMode != ParserStateMode.Buffered)
@@ -721,7 +721,7 @@
             IsUnderlined = packet.IsUnderlined;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private bool ProcessTextPacket(ClosedCaptionPacket packet)
         {
             if (StateMode != ParserStateMode.Scrolling && StateMode != ParserStateMode.Buffered)

@@ -11,8 +11,10 @@
         /// <summary>
         /// Gets the character as a string.
         /// </summary>
-        public string Text => Character == default ?
-                        string.Empty : Character.ToString(CultureInfo.InvariantCulture);
+        public string Text
+        {
+            get { return Character == default(char) ? string.Empty : Character.ToString(CultureInfo.InvariantCulture); }
+        }
 
         /// <summary>
         /// Gets or sets the character.
@@ -63,12 +65,12 @@
         /// </summary>
         public void Clear()
         {
-            Character = default;
+            Character = default(char);
             Opacity = 0.80;
             Foreground = Brushes.White;
             Background = Brushes.Black;
-            IsUnderlined = default;
-            IsItalics = default;
+            IsUnderlined = default(bool);
+            IsItalics = default(bool);
         }
     }
 }

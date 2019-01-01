@@ -191,7 +191,7 @@
         /// Additionally, it calls Seek on the renderer to remove any caches
         /// </summary>
         /// <param name="t">The t.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void InvalidateRenderer(MediaType t)
         {
             // This forces the rendering worker to send the
@@ -206,7 +206,7 @@
         /// <param name="delay">The delay.</param>
         /// <param name="decodedFrameCount">The decoded frame count.</param>
         /// <returns>True if a delay was actually introduced</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private bool DelayDecoder(DelayProvider delay, int decodedFrameCount)
         {
             // We don't delay if there was output or there is a command
@@ -225,11 +225,13 @@
         /// <param name="decodedFrameCount">The decoded frame count.</param>
         /// <param name="main">The main.</param>
         /// <returns>True if media ended</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private bool DetectHasDecodingEnded(int decodedFrameCount, MediaType main) =>
-                decodedFrameCount <= 0
-                && IsWorkerInterruptRequested == false
-                && CanReadMoreFramesOf(main) == false
-                && Blocks[main].IndexOf(WallClock) >= Blocks[main].Count - 1;
+        [MethodImpl(256)]
+        private bool DetectHasDecodingEnded(int decodedFrameCount, MediaType main)
+        {
+            return decodedFrameCount <= 0
+                   && IsWorkerInterruptRequested == false
+                   && CanReadMoreFramesOf(main) == false
+                   && Blocks[main].IndexOf(WallClock) >= Blocks[main].Count - 1;
+        }
     }
 }

@@ -18,9 +18,15 @@
         }
 
         /// <inheritdoc />
-        protected override TimeSpan FromLong(long backingValue) => TimeSpan.FromTicks(backingValue);
+        protected override TimeSpan FromLong(long backingValue)
+        {
+            return TimeSpan.FromTicks(backingValue);
+        }
 
         /// <inheritdoc />
-        protected override long ToLong(TimeSpan value) => value.Ticks;
+        protected override long ToLong(TimeSpan value)
+        {
+            return value.Ticks;
+        }
     }
 }

@@ -19,7 +19,7 @@
         /// <param name="action">The action.</param>
         private DeferredAction(Action<DeferredAction> action)
         {
-            DeferTimer = new Timer(s => Application.Current?.Dispatcher?.Invoke(() => action(this)));
+            DeferTimer = new Timer(s => Application.Current?.Dispatcher?.Invoke(new Action(() => action(this))));
         }
 
         /// <summary>

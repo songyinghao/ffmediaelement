@@ -165,8 +165,8 @@ namespace Unosquare.FFME
         /// </summary>
         public static string FFmpegDirectory
         {
-            get => MediaEngine.FFmpegDirectory;
-            set => MediaEngine.FFmpegDirectory = value;
+            get { return MediaEngine.FFmpegDirectory; }
+            set { MediaEngine.FFmpegDirectory = value; }
         }
 
         /// <summary>
@@ -176,15 +176,18 @@ namespace Unosquare.FFME
         /// </summary>
         public static int FFmpegLoadModeFlags
         {
-            get => MediaEngine.FFmpegLoadModeFlags;
-            set => MediaEngine.FFmpegLoadModeFlags = value;
+            get { return MediaEngine.FFmpegLoadModeFlags; }
+            set { MediaEngine.FFmpegLoadModeFlags = value; }
         }
 
         /// <summary>
         /// Gets the FFmpeg version information. Returns null
         /// when the libraries have not been loaded.
         /// </summary>
-        public static string FFmpegVersionInfo => MediaEngine.FFmpegVersionInfo;
+        public static string FFmpegVersionInfo
+        {
+            get { return MediaEngine.FFmpegVersionInfo; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the video visualization control
@@ -200,7 +203,10 @@ namespace Unosquare.FFME
         Uri IUriContext.BaseUri { get; set; }
 
         /// <inheritdoc />
-        ILoggingHandler ILoggingSource.LoggingHandler => this;
+        ILoggingHandler ILoggingSource.LoggingHandler
+        {
+            get { return this; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this instance is disposed.
@@ -210,8 +216,8 @@ namespace Unosquare.FFME
         /// </value>
         public bool IsDisposed
         {
-            get => m_IsDisposed.Value;
-            private set => m_IsDisposed.Value = value;
+            get { return m_IsDisposed.Value; }
+            private set { m_IsDisposed.Value = value; }
         }
 
         /// <summary>
@@ -253,7 +259,10 @@ namespace Unosquare.FFME
         /// if the libraries cannot be loaded.
         /// </summary>
         /// <returns>true if libraries were loaded, false if libraries were already loaded.</returns>
-        public static bool LoadFFmpeg() => MediaEngine.LoadFFmpeg();
+        public static bool LoadFFmpeg()
+        {
+            return MediaEngine.LoadFFmpeg();
+        }
 
         /// <summary>
         /// Requests new media options to be applied, including stream component selection.
@@ -392,8 +401,10 @@ namespace Unosquare.FFME
         #region Methods
 
         /// <inheritdoc />
-        void ILoggingHandler.HandleLogMessage(MediaLogMessage message) =>
+        void ILoggingHandler.HandleLogMessage(MediaLogMessage message)
+        {
             RaiseMessageLoggedEvent(message);
+        }
 
         /// <inheritdoc />
         public void Dispose()
@@ -419,8 +430,7 @@ namespace Unosquare.FFME
                     ContentGrid?.Children.Remove(CaptionsView);
 
                     // Force Refresh
-                    ContentGrid?.Dispatcher?.InvokeAsync(() => { },
-                        DispatcherPriority.Render);
+                    ContentGrid?.Dispatcher?.BeginInvoke(DispatcherPriority.Render, new Action(() => { }));
                 });
             }
         }
@@ -456,7 +466,8 @@ namespace Unosquare.FFME
         /// <exception cref="InvalidOperationException">When content has been locked.</exception>
         private static object OnCoerceContentValue(DependencyObject d, object baseValue)
         {
-            if (d is MediaElement element && element.AllowContentChange == false)
+            var element = d as MediaElement;
+            if (element != null && element.AllowContentChange == false)
                 throw new InvalidOperationException($"The '{nameof(Content)}' property is not meant to be set.");
 
             return baseValue;

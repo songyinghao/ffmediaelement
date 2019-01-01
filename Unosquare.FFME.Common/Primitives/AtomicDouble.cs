@@ -29,9 +29,15 @@
         }
 
         /// <inheritdoc />
-        protected override double FromLong(long backingValue) => BitConverter.Int64BitsToDouble(backingValue);
+        protected override double FromLong(long backingValue)
+        {
+            return BitConverter.Int64BitsToDouble(backingValue);
+        }
 
         /// <inheritdoc />
-        protected override long ToLong(double value) => BitConverter.DoubleToInt64Bits(value);
+        protected override long ToLong(double value)
+        {
+            return BitConverter.DoubleToInt64Bits(value);
+        }
     }
 }

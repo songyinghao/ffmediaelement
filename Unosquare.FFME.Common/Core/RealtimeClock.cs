@@ -18,7 +18,10 @@
         /// Initializes a new instance of the <see cref="RealTimeClock"/> class.
         /// The clock starts paused and at the 0 position.
         /// </summary>
-        public RealTimeClock() => Reset();
+        public RealTimeClock()
+        {
+            Reset();
+        }
 
         /// <summary>
         /// Gets or sets the clock position.
@@ -38,7 +41,10 @@
         /// <summary>
         /// Gets a value indicating whether the clock is running.
         /// </summary>
-        public bool IsRunning => Chronometer.IsRunning;
+        public bool IsRunning
+        {
+            get { return Chronometer.IsRunning; }
+        }
 
         /// <summary>
         /// Gets or sets the speed ratio at which the clock runs.

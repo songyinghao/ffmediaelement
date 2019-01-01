@@ -65,7 +65,10 @@
         /// <summary>
         /// Gets a value indicating whether this instance is disposed.
         /// </summary>
-        public bool IsDisposed => m_IsDisposed.Value;
+        public bool IsDisposed
+        {
+            get { return m_IsDisposed.Value; }
+        }
 
         /// <summary>
         /// Gets the registered component count.
@@ -220,7 +223,10 @@
         }
 
         /// <inheritdoc />
-        public void Dispose() => Dispose(true);
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         #endregion
 
@@ -284,7 +290,7 @@
         /// <param name="operation">The operation.</param>
         /// <param name="packet">The packet.</param>
         /// <param name="mediaType">Type of the media.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void ProcessPacketQueueChanges(PacketQueueOp operation, MediaPacket packet, MediaType mediaType)
         {
             if (OnPacketQueueChanged == null)
@@ -315,7 +321,7 @@
         /// This assumes no reading, decoding, or rendering is taking place at the time of the call.
         /// </summary>
         /// <param name="m">The media core engine.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         internal void RunQuickBuffering(MediaEngine m)
         {
             // We need to perform some packet reading and decoding

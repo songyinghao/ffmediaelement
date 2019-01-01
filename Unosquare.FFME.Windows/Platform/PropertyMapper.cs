@@ -8,6 +8,7 @@
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Windows;
+    using Unosquare.FFME.Common.NET4.Shared;
 
     /// <summary>
     /// A helper class to map and process synchronization
@@ -76,7 +77,7 @@
         /// <param name="m">The m.</param>
         /// <param name="lastSnapshot">The last snapshot.</param>
         /// <returns>A list of property names that have changed.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         public static string[] DetectNotificationPropertyChanges(this MediaElement m, Dictionary<string, object> lastSnapshot)
         {
             var result = new List<string>(PropertyMaxCount);
@@ -109,7 +110,7 @@
 
             foreach (var targetProperty in MediaElementDependencyProperties)
             {
-                engineValue = MediaEngineStateProperties[targetProperty.Key].GetValue(m.MediaCore.State);
+                engineValue = MediaEngineStateProperties[targetProperty.Key].GetValue(m.MediaCore.State, null);
                 propertyValue = m.GetValue(targetProperty.Value);
 
                 if (targetProperty.Value.PropertyType != MediaEngineStateProperties[targetProperty.Key].PropertyType)
@@ -131,11 +132,11 @@
         /// </summary>
         /// <param name="m">The m.</param>
         /// <param name="target">The target.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private static void SnapshotNotifications(this MediaElement m, Dictionary<string, object> target)
         {
             foreach (var p in MediaElementNotificationProperties)
-                target[p.Key] = p.Value.GetValue(m);
+                target[p.Key] = p.Value.GetValue(m, null);
         }
 
         /// <summary>
@@ -152,7 +153,8 @@
 
             foreach (var fieldInfo in fieldInfos)
             {
-                if (fieldInfo.GetValue(null) is DependencyProperty property)
+                var property = fieldInfo.GetValue(null) as DependencyProperty;
+                if (property != null)
                     result.Add(property);
             }
 

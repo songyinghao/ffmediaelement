@@ -62,6 +62,9 @@
         /// <param name="result">The result.</param>
         /// <param name="function">The function.</param>
         /// <returns>A descriptive error message</returns>
-        private static string ErrorMessage(LegacyAudioResult result, string function) => $"{result} calling {function}";
+        private static string ErrorMessage(LegacyAudioResult result, string function)
+        {
+            return $"{result} calling {function}";
+        }
     }
 }

@@ -59,11 +59,17 @@
         /// <summary>
         /// Gets the number of samples in the buffer for all channels.
         /// </summary>
-        public int Samples => BufferLength / (BitsPerSample / 8);
+        public int Samples
+        {
+            get { return BufferLength / (BitsPerSample / 8); }
+        }
 
         /// <summary>
         /// Gets the number of samples in the buffer per channel.
         /// </summary>
-        public int SamplesPerChannel => Samples / ChannelCount;
+        public int SamplesPerChannel
+        {
+            get { return Samples / ChannelCount; }
+        }
     }
 }

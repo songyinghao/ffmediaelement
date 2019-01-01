@@ -132,8 +132,8 @@
         /// </summary>
         protected bool IsCycleInterruptRequested
         {
-            get => m_IsCycleInterruptRequested;
-            private set => m_IsCycleInterruptRequested = value;
+            get { return m_IsCycleInterruptRequested; }
+            private set { m_IsCycleInterruptRequested = value; }
         }
 
         /// <summary>
@@ -152,7 +152,10 @@
         /// <summary>
         /// Requests the worker to start running. This method returns immediately.
         /// </summary>
-        public void RequestStart() => RequestWorkerState(ThreadStateRequest.Start);
+        public void RequestStart()
+        {
+            RequestWorkerState(ThreadStateRequest.Start);
+        }
 
         /// <summary>
         /// Requests the worker to start running. This method waits for the worker to
@@ -170,7 +173,10 @@
         /// </summary>
         /// <exception cref="ObjectDisposedException">When the worker has been disposed.</exception>
         /// <exception cref="InvalidOperationException">When the worker is not in the running state.</exception>
-        public void RequestSuspend() => RequestWorkerState(ThreadStateRequest.Suspend);
+        public void RequestSuspend()
+        {
+            RequestWorkerState(ThreadStateRequest.Suspend);
+        }
 
         /// <summary>
         /// Requests the worker suspends the execution of cycles and waits for the worker to enter the suspended state.
@@ -187,7 +193,10 @@
         /// This method returns immediately.
         /// </summary>
         /// <exception cref="ObjectDisposedException">When the worker has been disposed.</exception>
-        public void RequestResume() => RequestWorkerState(ThreadStateRequest.Resume);
+        public void RequestResume()
+        {
+            RequestWorkerState(ThreadStateRequest.Resume);
+        }
 
         /// <summary>
         /// Signals the worker to cancel suspension or delays and continue execution.
@@ -204,7 +213,10 @@
         /// </summary>
         /// <exception cref="ObjectDisposedException">When the worker has been disposed.</exception>
         /// <exception cref="InvalidOperationException">When the worker is not in the suspended or running state.</exception>
-        public void RequestStop() => RequestWorkerState(ThreadStateRequest.Stop);
+        public void RequestStop()
+        {
+            RequestWorkerState(ThreadStateRequest.Stop);
+        }
 
         /// <summary>
         /// Requests the worker to stop and waits for the worker thread to finish.
@@ -236,13 +248,19 @@
         /// </summary>
         /// <param name="timeout">The timeout to wait for. Use a negative values to wait indefinitely</param>
         /// <returns>False if the timeout expired. Otherwise, true.</returns>
-        public bool WaitOne(TimeSpan timeout) => WaitOne(Convert.ToInt32(timeout.TotalMilliseconds));
+        public bool WaitOne(TimeSpan timeout)
+        {
+            return WaitOne(Convert.ToInt32(timeout.TotalMilliseconds));
+        }
 
         /// <summary>
         /// Waits indefinitely for a worker cycle to complete
         /// </summary>
         /// <returns>False if the timeout expired. Otherwise, true.</returns>
-        public bool WaitOne() => WaitOne(Timeout.Infinite);
+        public bool WaitOne()
+        {
+            return WaitOne(Timeout.Infinite);
+        }
 
         /// <summary>
         /// Waits for the current worker state change request to be completed.
@@ -264,14 +282,20 @@
         /// Waits for the current worker state change request to be completed.
         /// </summary>
         /// <returns>False if the timeout expired. Otherwise, true.</returns>
-        public bool WaitForStateChanged() => WaitForStateChanged(Timeout.Infinite);
+        public bool WaitForStateChanged()
+        {
+            return WaitForStateChanged(Timeout.Infinite);
+        }
 
         /// <summary>
         /// Waits for the current worker state change request to be completed.
         /// </summary>
         /// <param name="timeout">The timeout.</param>
         /// <returns>False if the timeout expired. Otherwise, true.</returns>
-        public bool WaitForStateChanged(TimeSpan timeout) => WaitForStateChanged(Convert.ToInt32(timeout.TotalMilliseconds));
+        public bool WaitForStateChanged(TimeSpan timeout)
+        {
+            return WaitForStateChanged(Convert.ToInt32(timeout.TotalMilliseconds));
+        }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -298,8 +322,10 @@
         }
 
         /// <inheritdoc />
-        public override string ToString() =>
-            $"{nameof(BackgroundWorkerBase)}: {WorkerName} ({WorkerState})";
+        public override string ToString()
+        {
+            return $"{nameof(BackgroundWorkerBase)}: {WorkerName} ({WorkerState})";
+        }
 
         /// <summary>
         /// Contains the logic to be executed within a worker cycle.
@@ -323,7 +349,10 @@
         /// Called when the worker encounters an unhandled exception that forces it to exit.
         /// </summary>
         /// <param name="ex">The unhandled exception.</param>
-        protected virtual void OnWorkerException(Exception ex) => throw ex;
+        protected virtual void OnWorkerException(Exception ex)
+        {
+            throw ex;
+        }
 
         /// <summary>
         /// This method gets called when the worker has started. This is the first bit of
@@ -350,7 +379,7 @@
         /// Commits the worker state request.
         /// </summary>
         /// <param name="request">The request.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void CommitWorkerStateRequest(ThreadStateRequest request)
         {
             WorkerStateChangedEvent.Reset();
@@ -363,7 +392,7 @@
         /// Requests a worker state change.
         /// </summary>
         /// <param name="request">The state change request.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void RequestWorkerState(ThreadStateRequest request)
         {
             lock (SyncLock)
@@ -425,7 +454,7 @@
         /// This method also signals the <see cref="IsCycleInterruptRequested"/> without context switching.
         /// </summary>
         /// <param name="newState">The new state.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private void UpdateWorkerState(ThreadState newState)
         {
             lock (SyncLock)

@@ -185,10 +185,11 @@ namespace Unosquare.FFME.Rendering.Wave
             if (!TryEnterDeviceOperation())
                 return IntPtr.Zero;
 
+            IntPtr hWaveOut;
             try
             {
                 LegacyAudioException.Try(
-                    NativeMethods.OpenDevice(out var hWaveOut, deviceId, format, callback, instanceHandle, openFlags),
+                    NativeMethods.OpenDevice(out hWaveOut, deviceId, format, callback, instanceHandle, openFlags),
                     nameof(NativeMethods.OpenDevice));
 
                 return hWaveOut;
@@ -213,10 +214,11 @@ namespace Unosquare.FFME.Rendering.Wave
             if (!TryEnterDeviceOperation())
                 return IntPtr.Zero;
 
+            IntPtr hWaveOut;
             try
             {
                 LegacyAudioException.Try(
-                    NativeMethods.OpenDeviceOnWindow(out var hWaveOut, deviceId, format, callbackHandle, instanceHandle, openFlags),
+                    NativeMethods.OpenDeviceOnWindow(out hWaveOut, deviceId, format, callbackHandle, instanceHandle, openFlags),
                     nameof(NativeMethods.OpenDeviceOnWindow));
 
                 return hWaveOut;
@@ -343,13 +345,14 @@ namespace Unosquare.FFME.Rendering.Wave
         {
             if (deviceId < -1) throw new ArgumentException($"Invalid Device ID {deviceId}", nameof(deviceId));
             if (!TryEnterDeviceOperation())
-                return default;
+                return default(LegacyAudioDeviceInfo);
 
+            LegacyAudioDeviceInfo waveOutCaps;
             try
             {
                 LegacyAudioException.Try(
                     NativeMethods.RetrieveDeviceCapabilities((IntPtr)deviceId,
-                        out var waveOutCaps,
+                        out waveOutCaps,
                         Marshal.SizeOf(typeof(LegacyAudioDeviceInfo))),
                     nameof(NativeMethods.RetrieveDeviceCapabilities));
 
@@ -358,21 +361,27 @@ namespace Unosquare.FFME.Rendering.Wave
             finally { Monitor.Exit(SyncLock); }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private static bool TryEnterWaveOperation(IntPtr deviceHandle)
         {
             if (deviceHandle == IntPtr.Zero) return false;
             var acquired = false;
             Monitor.TryEnter(SyncLock, LockTimeout, ref acquired);
-            return acquired ? true : throw new TimeoutException(TimeoutErrorMessage);
+            if (acquired)
+                return true;
+            else
+                throw new TimeoutException(TimeoutErrorMessage);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(256)]
         private static bool TryEnterDeviceOperation()
         {
             var acquired = false;
             Monitor.TryEnter(SyncLock, LockTimeout, ref acquired);
-            return acquired ? true : throw new TimeoutException(TimeoutErrorMessage);
+            if (!acquired)
+                throw new TimeoutException(TimeoutErrorMessage);
+            else
+                return true;
         }
 
         #endregion
