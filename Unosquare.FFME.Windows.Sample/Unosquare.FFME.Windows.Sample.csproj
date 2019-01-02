@@ -182,11 +182,11 @@
   <ItemGroup>
     <ProjectReference Include="..\FFmpeg.AutoGen\FFmpeg.AutoGen.csproj">
       <Project>{1dde1093-c484-4dba-bb40-47cdefa12d7a}</Project>
-      <Name>FFmpeg.AutoGen.NET4</Name>
+      <Name>FFmpeg.AutoGen</Name>
     </ProjectReference>
     <ProjectReference Include="..\Unosquare.FFME.Common\Unosquare.FFME.Common.csproj">
       <Project>{07bd11f4-18ea-4b26-8d61-dd50524d5344}</Project>
-      <Name>Unosquare.FFME.Common.NET4</Name>
+      <Name>Unosquare.FFME.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Unosquare.FFME.Windows\Unosquare.FFME.Windows.csproj">
       <Project>{a6eb99a6-aae2-4e6e-ab9e-93992ce5b84d}</Project>
@@ -202,6 +202,9 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(SolutionDir)ThirdParty\* $(TargetDir) /S /F /Y /I</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
